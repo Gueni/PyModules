@@ -5,10 +5,10 @@ import random
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 
-bot_username = 'gueni_art'
-bot_password = 'H3ei1senberG1925**++'
+bot_username = ''
+bot_password = ''
 
-profiles = ['gueni_art']
+profiles = ['']
 amount = 2376
 
 # 'usernames' or 'links'
