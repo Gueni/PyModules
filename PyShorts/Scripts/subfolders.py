@@ -21,5 +21,5 @@ def move_files_to_parent(parent_folder):
                 print(f"Removed empty folder: {dir_path}")
 
 # Example usage
-folder_path = 'E:\PERSONAL\ME\VID'
+folder_path = ''
 move_files_to_parent(folder_path)

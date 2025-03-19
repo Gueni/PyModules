@@ -22,7 +22,7 @@ def find_files_with_same_size(folder_path):
 
 #---------------------------------------------------------------------
 if __name__ == "__main__":
-    destination_folder = "D:/PC"
+    destination_folder = ""
     duplicate_files = find_files_with_same_size(destination_folder)
     
     if duplicate_files:

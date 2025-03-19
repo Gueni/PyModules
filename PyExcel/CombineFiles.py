@@ -2,7 +2,7 @@
 import pandas as pd
 
 #specify the files location (or path)
-excel_files = ['/home/hunter/Documents/Workspace/Python_code/datasets/SampleData.xlsx']
+excel_files = ['']
 
 #create a blank dataframe
 merge = pd.DataFrame()

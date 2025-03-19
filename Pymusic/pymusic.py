@@ -2,9 +2,8 @@ import glob
 from importlib.resources import path
 import os
 
-# mylist = [f for f in glob.glob("/home/hunter/Documents/Workspace/Python_code/Pymusic/music/*.webm")]
 mylist  = []
-path    =   "/home/hunter/Documents/Workspace/Python_code/Pymusic/music/*.webm"
+path    =   ""
 
 for file in glob.glob(path): 
     filename = os.path.basename(file)

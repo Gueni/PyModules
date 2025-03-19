@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
-charger_data = pd.read_csv('C:/Users/HomePC/Documents/4 WORKSPACE/23-Python_code/pyshorts-1/Scripts/2023051601_charger.csv')
-obd_data = pd.read_csv('C:/Users/HomePC/Documents/4 WORKSPACE/23-Python_code/pyshorts-1/Scripts/2023051601_OBD.csv')
+charger_data = pd.read_csv('/2023051601_charger.csv')
+obd_data = pd.read_csv('/2023051601_OBD.csv')
 print(charger_data.head())
 print(charger_data.describe())
 print(obd_data.head())

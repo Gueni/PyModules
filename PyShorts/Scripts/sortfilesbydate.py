@@ -18,7 +18,7 @@ def sort_files_by_creation_date(folder_path):
         os.rename(os.path.join(folder_path, file), os.path.join(folder_path, new_name))
 
 if __name__ == "__main__":
-    folder_path  = "D:/8 PC/"
+    folder_path  = ""
     sort_files_by_creation_date(folder_path)
 
 

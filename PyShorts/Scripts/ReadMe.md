@@ -1,1 +1,0 @@
-# Python shorts is a repository for short and useful python scripts.

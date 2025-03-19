@@ -2,7 +2,7 @@
 import openpyxl
 
 #specify the files location (or path)
-excel_files = ['/home/hunter/Documents/Workspace/Python_code/datasets/SampleData2.xlsx']
+excel_files = ['']
 #create an empty list to append values later on
 values = []
 #loop through the files in the "excel_files" list

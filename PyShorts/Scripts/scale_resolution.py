@@ -34,5 +34,5 @@ def scale_all_images_to_highest_resolution(directory):
 
 
 # Example usage:
-directory_path = "C:/Users/Mohamed Gueni/Videos/Photography"
+directory_path = ""
 scale_all_images_to_highest_resolution(directory_path)
