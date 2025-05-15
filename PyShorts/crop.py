@@ -27,5 +27,5 @@ def crop_images_in_folder(folder_path):
                 cropped_img.save(file_path)
 
 # Example usage
-folder_path = "D:/WORKSPACE/LIB/Library/PLECS LIB/PNG"
+folder_path = ""
 crop_images_in_folder(folder_path)

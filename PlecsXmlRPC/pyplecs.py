@@ -1,8 +1,5 @@
 
-
-
 import xmlrpc.client
-
 class pyplecs:
     
     def __init__(self,url,port,path,modelvar):
@@ -34,10 +31,6 @@ class pyplecs:
         '''
         for key,val in scopedict:
             self.server.plecs.scope(val,'ClearTraces')
-    
-
-
-
 
 opts = {'ModelVars' :  { 'R2' : 50e-6 } }
 
@@ -48,6 +41,3 @@ for R in range(1,15):
     time.sleep(4)
     # proxy.plecs.scope('Pyrpc/Scope', 'SaveTraces', 'ﬁleName')
 proxy.plecs.close('Pyrpc') 
-
-
-

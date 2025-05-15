@@ -19,6 +19,5 @@ command = [
     "--webm_path", webm_path,
     "--mp3_path", mp3path
 ]
-
 # Execute the command
 subprocess.run(command, check=True)

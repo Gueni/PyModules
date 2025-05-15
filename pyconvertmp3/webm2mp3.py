@@ -1,6 +1,3 @@
-# Convert webm files to mp3 using FFMPEG
-# To use this script you need to install FFMPEG in your system
-# For windows users, you need to download & add FFMPEG to the PATH (Windows Environment Variables)
 
 import os
 import re
