@@ -85,7 +85,7 @@ param_meta      = {
                     'source'          : 'Device physics or datasheet'
                 }
             }
-console         = Console(file=open("PyShorts\DATA\log.log", "w", encoding="utf-8"),force_terminal=True,no_color=True)  
+console         = Console(file=open("PyShorts\DATA\sicmos_BSIM3v3.log", "w", encoding="utf-8"),force_terminal=True,no_color=True)  
 
 def print_header(params, param_meta, log_file_path):
     table = Table(title="MOSFET Parameters", show_lines=True)
@@ -171,7 +171,7 @@ def plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True):
     data_np = np.array([(d['T'], d['Vgs'], d['Vds'], d['Id'], d['Cgs'], d['Cgd'], d['Cds'])for d in data])
     T_arr, Vgs_arr, Vds_arr, Id_arr, Cgs_arr, Cgd_arr, Cds_arr = data_np.T
     df      = pd.DataFrame(data_np)
-    df.to_csv("PyShorts\DATA\VDS_VGS_T_Sweep_ID_CGD_CGS_CDS.csv", index=False,header=["T", "Vgs", "Vds", "Id", "Cgs", "Cgd", "Cds"])
+    df.to_csv("PyShorts\DATA\sicmos_BSIM3v3.csv", index=False,header=["T", "Vgs", "Vds", "Id", "Cgs", "Cgd", "Cds"])
     fig, axs = plt.subplots(2, 2, figsize=(14, 10))
     fig.suptitle('MOSFET Characteristics vs Vgs, Vds, T', fontsize=16)
     # Id vs Vgs for different Vds
@@ -192,18 +192,18 @@ def plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True):
     axs[0, 1].set_ylabel('Id [A]')
     axs[0, 1].legend()
     axs[0, 1].grid(True)
-    # Cgs, Cgd, Cds vs Vds (at Vgs=2.5V, T=350K)
+    # Cgs, Cgd, Cds vs Vds (at Vgs=15V, T=350K)
     idx = (Vgs_arr == 2.5) & (T_arr == 350)
     axs[1, 0].plot(Vds_arr[idx], Cgs_arr[idx], label='Cgs')
     axs[1, 0].plot(Vds_arr[idx], Cgd_arr[idx], label='Cgd')
     axs[1, 0].plot(Vds_arr[idx], Cds_arr[idx], label='Cds')
-    axs[1, 0].set_title('Capacitances vs Vds (Vgs=2.5V, T=350K)')
+    axs[1, 0].set_title('Capacitances vs Vds (Vgs=15V, T=350K)')
     axs[1, 0].set_xlabel('Vds [V]')
     axs[1, 0].set_ylabel('Capacitance [F]')
     axs[1, 0].legend()
     axs[1, 0].grid(True)
 
-    # Optional: Id vs T at Vgs=2.5V, Vds=2.0V
+    # Optional: Id vs T at Vgs=15V, Vds=2.0V
     idx = (Vgs_arr == 15) & (Vds_arr == 600)
     axs[1, 1].plot(T_arr[idx], Id_arr[idx])
     axs[1, 1].set_title('Id vs Temperature (Vgs=15V, Vds=600V)')
@@ -221,5 +221,5 @@ if __name__ == "__main__":
     T_values   = [300, 325, 350, 375, 400, 425, 450]  # Temperature in Kelvin
 
 
-    print_header(bsim3_params, param_meta, "PyShorts\DATA\log.log")
+    print_header(bsim3_params, param_meta, "PyShorts\DATA\sicmos_BSIM3v3.log")
     plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True)

@@ -120,7 +120,7 @@ param_meta      = {
             }
 #?-------------------------------------------------------------------------------------
 
-console         = Console(file=open("PyShorts\DATA\log.log", "w", encoding="utf-8"),force_terminal=True,no_color=True)  
+console         = Console(file=open("PyShorts\DATA\sicmos_BSIM3v3.log", "w", encoding="utf-8"),force_terminal=True,no_color=True)  
 
 def print_header(params, param_meta, log_file_path):
     table = Table(title="MOSFET Parameters", show_lines=True)
@@ -227,30 +227,73 @@ def Cdep_num(VDS_val, VGS_val, T_val): #* Calculate the depletion capacitance
 def CGD_num(VDS_val, VGS_val, T_val):#* Calculate the gate-drain capacitance
     return (Cox() * Cdep_num(VDS_val, VGS_val, T_val)) / (Cox() + Cdep_num(VDS_val, VGS_val, T_val))
 
-def CGS_num(VGS, VDS, T):
+def CDS_num(VDS):
+    """
+    Calculate drain-source capacitance (CDS) as a function of VGS, VDS, and T.
+    This junction capacitance depends mainly on VDS reverse bias and temperature.
+    """
+    CJ = bsim3_params['Cj0']        # Junction capacitance per unit area [F/m²]
 
+    Ld = 1e-6    # Diffusion length or depletion width [m], typically ~1µm
+    W = bsim3_params['W']          # Transistor width [m]
 
-def CDS_num(VGS, VDS, T):
+    A = W * Ld
+                   # Effective area [m²]
 
+    Vbias = max(VDS, 0.01)         # Ensure positive bias for depletion model
+
+    # Basic depletion capacitance model (reverse-biased junction)
+    VJ = bsim3_params['Vj']      # Junction potential [V]
+    m = bsim3_params['m']        # Grading coefficient
+    CDS = CJ * A / ((1 + Vbias / VJ) ** m)
+
+    return CDS
+
+def CGS_num(VGS):
+    """
+    Calculate gate-source capacitance (CGS) as a function of VGS, VDS, and T.
+    In most SiC MOSFET models, CGS is weakly dependent on VDS and mainly varies with VGS and temperature.
+    """
+
+    Vgs_eff = max(VGS - bsim3_params['Vth0'], 0)
+
+    W = bsim3_params['W']
+    L = bsim3_params['L']
+    scale = 1.0 + 0.2 * np.tanh(Vgs_eff / 2.0)  # Smooth transition
+    CGS = Cox() * W * L * scale
+
+    return CGS
 
 def mosfet_model(Vgs, Vds, T, params):
-    Vth         = params['Vth0'] - params['kT'] * (T - 300)
-    Vgt         = Vgs - Vth
+    Vth     = params['Vth0'] - params['kT'] * (T - 300)   # Temperature-adjusted threshold
+    Vgt     = Vgs - Vth                                   # Gate overdrive
+    beta    = beta_func(T)                              # Transconductance factor
+    lam     = params['lambda']                            # Channel-length modulation
+
     if Vgt <= 0:
-        Id      = 0.0   # Cutoff
+        # Cutoff region
+        Id      = 0.0
         Cgs     = 0.0
         Cgd     = 0.0
-    elif Vds < Vgt:     # Linear region
-        Id      = beta_func(T) * (2 * Vgs - Vds) * Vds * (1 + lambda_ * Vds)
-        
+    elif Vds < Vgt:
+        # Linear (Triode) region
+        Id      = beta * (2 * Vgt * Vds) * (1 + lam * Vds)
         Cgs     = CGS_num(Vgs)
         Cgd     = CGD_num(Vds, Vgs, T)
-    else:               # Saturation region
-        Id      = beta_func(T) * (2 * Vgs - Vds) * Vds * (1 + lambda_ * Vds)
+    else:
+        # Saturation region
+        Id      = beta * Vgt**2 * (1 + lam * Vds)
         Cgs     = CGS_num(Vgs)
-        Cgd     = 0.0  # Pinched off in saturation
-    Cds         = CDS_num(Vds)
-    return {'Id'    : Id,'Cgs'   : Cgs,'Cgd'   : Cgd,'Cds'   : Cds}
+        Cgd     = 0.0  # In saturation, Cgd is pinched off
+
+    Cds = CDS_num(Vds)
+
+    return {
+        'Id'  : Id,
+        'Cgs' : Cgs,
+        'Cgd' : Cgd,
+        'Cds' : Cds
+    }
 
 def plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True):
     
@@ -271,7 +314,7 @@ def plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True):
     data_np = np.array([(d['T'], d['Vgs'], d['Vds'], d['Id'], d['Cgs'], d['Cgd'], d['Cds'])for d in data])
     T_arr, Vgs_arr, Vds_arr, Id_arr, Cgs_arr, Cgd_arr, Cds_arr = data_np.T
     df      = pd.DataFrame(data_np)
-    df.to_csv("PyShorts\DATA\VDS_VGS_T_Sweep_ID_CGD_CGS_CDS.csv", index=False,header=["T", "Vgs", "Vds", "Id", "Cgs", "Cgd", "Cds"])
+    df.to_csv("PyShorts\DATA\sicmos_BSIM3v3.csv", index=False,header=["T", "Vgs", "Vds", "Id", "Cgs", "Cgd", "Cds"])
     fig, axs = plt.subplots(2, 2, figsize=(14, 10))
     fig.suptitle('MOSFET Characteristics vs Vgs, Vds, T', fontsize=16)
     # Id vs Vgs for different Vds
@@ -314,11 +357,11 @@ def plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True):
     if show:
         plt.show()
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     Vgs_values = np.linspace(0.0, 20.0, 9)     # Gate voltage from 0V to 20V
-#     Vds_values = np.linspace(0.0, 800.0, 9)    # Drain voltage from 0V to 800V
-#     T_values   = [300, 325, 350, 375, 400, 425, 450]  # Temperature in Kelvin
+    Vgs_values = np.linspace(0.0, 20.0, 9)     # Gate voltage from 0V to 20V
+    Vds_values = np.linspace(0.0, 800.0, 9)    # Drain voltage from 0V to 800V
+    T_values   = [300, 325, 350, 375, 400, 425, 450]  # Temperature in Kelvin
 
-#     print_header(bsim3_params, param_meta, "PyShorts\DATA\log.log")
-#     plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True)
+    print_header(bsim3_params, param_meta, "PyShorts\DATA\sicmos_BSIM3v3.log")
+    plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True)
