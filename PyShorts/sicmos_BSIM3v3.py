@@ -1,36 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from rich.table import Table
-from rich.console import Console
 from rich.theme import Theme
-from sympy import symbols, Eq, Piecewise, Max, simplify, pprint
 from rich.console import Console
-from sympy import symbols, Eq, Piecewise, Max, simplify, pretty
-from rich.console import Console
-
-# Create a Console that logs to file
-from sympy import symbols, Piecewise, Max, simplify, pretty
-from rich.console import Console
-from rich.panel import Panel
 from sympy import symbols, Piecewise, Max, pretty
-from rich.console import Console
-from rich.table import Table
+import pandas as pd
 
-from sympy import symbols, Piecewise, Max, pretty
-from rich.console import Console
-from rich.table import Table
 
-# Create a Console that writes to a log file
 log_file_path = "PyShorts/DATA/log.log"
 console = Console(file=open(log_file_path, "w", encoding="utf-8"), force_terminal=True)
-
-# Define symbols
 Vgs, Vds, T = symbols("Vgs Vds T")
 Vth0, kT, mu0, mu_exp = symbols("Vth0 kT mu0 mu_exp")
 Cox, W, L, lambd = symbols("Cox W L lambda")
 Cj0, Vbi, m = symbols("Cj0 Vbi m")
-
-# Derived quantities
 Vth = Vth0 - kT * (T - 300)
 mu_eff = mu0 * (300 / T)**mu_exp
 Vgt = Vgs - Vth
@@ -56,25 +38,15 @@ Cgd_expr = Piecewise(
 
 Cds_expr = Cj0 / (1 + Max(Vds, 0) / Vbi)**m
 
-# Prepare the table
 table = Table(title="Symbolic MOSFET Model Equations")
-
 table.add_column("Equation", style="cyan", no_wrap=True)
 table.add_column("Expression", style="magenta")
-
 table.add_row("Id (Drain Current)", pretty(Id_expr, use_unicode=True))
 table.add_row("Cgs (Gate-Source Capacitance)", pretty(Cgs_expr, use_unicode=True))
 table.add_row("Cgd (Gate-Drain Capacitance)", pretty(Cgd_expr, use_unicode=True))
 table.add_row("Cds (Drain-Source Capacitance)", pretty(Cds_expr, use_unicode=True))
 console = Console(file=open(log_file_path, "w", encoding="utf-8"), force_terminal=True, color_system=None)
-
-# Print the table to the log file
 console.print(table)
-
-
-
-
-
 
 
 def mosfet_model(Vgs, Vds, T, params):
@@ -177,6 +149,10 @@ data_np = np.array([
     for d in data
 ])
 T_arr, Vgs_arr, Vds_arr, Id_arr, Cgs_arr, Cgd_arr, Cds_arr = data_np.T
+
+df = pd.DataFrame(data_np)
+df.to_csv("plecs_input.csv", index=False,header=["T", "Vgs", "Vds", "Id", "Cgs", "Cgd", "Cds"])
+
 fig, axs = plt.subplots(2, 2, figsize=(14, 10))
 fig.suptitle('MOSFET Characteristics vs Vgs, Vds, T', fontsize=16)
 # Id vs Vgs for different Vds
