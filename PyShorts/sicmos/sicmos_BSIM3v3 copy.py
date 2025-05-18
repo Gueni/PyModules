@@ -120,7 +120,7 @@ param_meta      = {
             }
 #?-------------------------------------------------------------------------------------
 
-console         = Console(file=open("PyShorts\DATA\sicmos_BSIM3v3.log", "w", encoding="utf-8"),force_terminal=True,no_color=True)  
+console         = Console(file=open("PyShorts\sicmos\sicmos_BSIM3v3.log", "w", encoding="utf-8"),force_terminal=True,no_color=True)  
 
 def print_header(params, param_meta, log_file_path):
     table = Table(title="MOSFET Parameters", show_lines=True)
@@ -295,37 +295,55 @@ def mosfet_model(Vgs, Vds, T, params):
         'Cds' : Cds
     }
 
-def plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True):
-    
+def plot_results(Vgs_values, Vds_values, T_values, bsim3_params, show=True):
     data = []
     for T in T_values:
         for Vgs in Vgs_values:
             for Vds in Vds_values:
                 result = mosfet_model(Vgs, Vds, T, bsim3_params)
                 data.append({
-                    'T'     : T,
-                    'Vgs'   : Vgs,
-                    'Vds'   : Vds,
-                    'Id'    : result['Id'],
-                    'Cgs'   : result['Cgs'],
-                    'Cgd'   : result['Cgd'],
-                    'Cds'   : result['Cds']
+                    'T': T,
+                    'Vgs': Vgs,
+                    'Vds': Vds,
+                    'Id': result['Id'],
+                    'Cgs': result['Cgs'],
+                    'Cgd': result['Cgd'],
+                    'Cds': result['Cds']
                 })
-    data_np = np.array([(d['T'], d['Vgs'], d['Vds'], d['Id'], d['Cgs'], d['Cgd'], d['Cds'])for d in data])
-    T_arr, Vgs_arr, Vds_arr, Id_arr, Cgs_arr, Cgd_arr, Cds_arr = data_np.T
-    df      = pd.DataFrame(data_np)
-    df.to_csv("PyShorts\DATA\sicmos_BSIM3v3.csv", index=False,header=["T", "Vgs", "Vds", "Id", "Cgs", "Cgd", "Cds"])
+
+    # Create time array: 1.0 sec total, 1e-3 sec step
+    time_steps = int(1.0 / 1e-3)  # = 1000
+    time_array = np.linspace(0, 1.0, time_steps)
+
+    # Repeat or tile time to match the number of data points
+    total_data_points = len(data)
+    time_column = np.resize(time_array, total_data_points)  # Resizes cyclically
+
+    # Build DataFrame with time as the first column
+    df = pd.DataFrame(data)
+    df.insert(0, 'time', time_column)
+
+    # Save CSV with new column order
+    df.to_csv("PyShorts/sicmos/sicmos_BSIM3v3.csv", index=False)
+
+    # Convert to NumPy for plotting
+    data_np = df.to_numpy()
+    _, T_arr, Vgs_arr, Vds_arr, Id_arr, Cgs_arr, Cgd_arr, Cds_arr = data_np.T
+
+    # Plotting as before
     fig, axs = plt.subplots(2, 2, figsize=(14, 10))
     fig.suptitle('MOSFET Characteristics vs Vgs, Vds, T', fontsize=16)
+
     # Id vs Vgs for different Vds
     for vds in np.unique(Vds_arr):
-        idx = (Vds_arr == vds) & (T_arr == 350)  # fixed T
+        idx = (Vds_arr == vds) & (T_arr == 350)
         axs[0, 0].plot(Vgs_arr[idx], Id_arr[idx], label=f'Vds={vds:.1f}V')
     axs[0, 0].set_title('Id vs Vgs (T=350K)')
     axs[0, 0].set_xlabel('Vgs [V]')
     axs[0, 0].set_ylabel('Id [A]')
     axs[0, 0].legend()
     axs[0, 0].grid(True)
+
     # Id vs Vds for different Vgs
     for vgs in np.unique(Vgs_arr):
         idx = (Vgs_arr == vgs) & (T_arr == 350)
@@ -335,6 +353,7 @@ def plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True):
     axs[0, 1].set_ylabel('Id [A]')
     axs[0, 1].legend()
     axs[0, 1].grid(True)
+
     # Cgs, Cgd, Cds vs Vds (at Vgs=2.5V, T=350K)
     idx = (Vgs_arr == 2.5) & (T_arr == 350)
     axs[1, 0].plot(Vds_arr[idx], Cgs_arr[idx], label='Cgs')
@@ -346,13 +365,14 @@ def plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True):
     axs[1, 0].legend()
     axs[1, 0].grid(True)
 
-    # Optional: Id vs T at Vgs=2.5V, Vds=2.0V
+    # Id vs T at Vgs=15V, Vds=600V
     idx = (Vgs_arr == 15) & (Vds_arr == 600)
     axs[1, 1].plot(T_arr[idx], Id_arr[idx])
     axs[1, 1].set_title('Id vs Temperature (Vgs=15V, Vds=600V)')
     axs[1, 1].set_xlabel('Temperature [K]')
     axs[1, 1].set_ylabel('Id [A]')
     axs[1, 1].grid(True)
+
     plt.tight_layout()
     if show:
         plt.show()
@@ -363,5 +383,5 @@ if __name__ == "__main__":
     Vds_values = np.linspace(0.0, 800.0, 9)    # Drain voltage from 0V to 800V
     T_values   = [300, 325, 350, 375, 400, 425, 450]  # Temperature in Kelvin
 
-    print_header(bsim3_params, param_meta, "PyShorts\DATA\sicmos_BSIM3v3.log")
+    print_header(bsim3_params, param_meta, "PyShorts\sicmos\sicmos_BSIM3v3.log")
     plot_results(Vgs_values, Vds_values, T_values, bsim3_params,show=True)
