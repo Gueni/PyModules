@@ -236,7 +236,7 @@ def plot_results(Vgs_values, Vds_values, T_values, bsim3_params, show=True):
 
 if __name__ == "__main__":
 
-    Vgs_values = np.linspace(.0, 20.0, 9)     # Gate voltage from 0V to 20V
+    Vgs_values = np.linspace(0.0, 20.0, 9)     # Gate voltage from 0V to 20V
     Vds_values = np.linspace(0.0, 1200.0, 9)    # Drain voltage from 0V to 800V
     T_values   = [300, 325, 350, 375, 400, 425, 450]  # Temperature in Kelvin
 
