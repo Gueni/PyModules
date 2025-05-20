@@ -1,43 +1,120 @@
                                                    MOSFET Parameters                                                    
-┏━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Quantity ┃ Value      ┃ Equation                ┃ Unit          ┃ Description              ┃ Source                  ┃
-┡━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ Vth0     │ 1.0000     │ Threshold voltage at    │ V             │ Threshold voltage of the │ Device datasheet or     │
-│          │            │ 300K                    │               │ MOSFET at 300 K          │ experimental extraction │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ kT       │ 0.0020     │ Vth temperature         │ V/K           │ Coefficient for          │ Device datasheet or     │
-│          │            │ coefficient             │               │ threshold voltage        │ model parameter         │
-│          │            │                         │               │ temperature dependence   │                         │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ mu0      │ 0.0500     │ Effective mobility at   │ m^2/V·s       │ Carrier mobility in      │ Model parameter from    │
-│          │            │ 300K                    │               │ channel at 300 K         │ literature or datasheet │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ mu_exp   │ 1.5000     │ Mobility degradation    │ dimensionless │ Exponent modeling        │ Fitted parameter from   │
-│          │            │ exponent                │               │ mobility dependence on   │ experiments             │
-│          │            │                         │               │ temperature              │                         │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ Cox      │ 0.0034     │ eps_ox / t_ox           │ F/m^2         │ Capacitance of gate      │ Calculated from oxide   │
-│          │            │                         │               │ oxide per unit area      │ thickness and           │
-│          │            │                         │               │                          │ permittivity            │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ W        │ 1.0000e-04 │ Transistor width        │ m             │ Channel width of the     │ Design layout parameter │
-│          │            │                         │               │ MOSFET                   │                         │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ L        │ 1.0000e-06 │ Channel length          │ m             │ Channel length of the    │ Design layout parameter │
-│          │            │                         │               │ MOSFET                   │                         │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ lambda   │ 0.0200     │ Channel length          │ 1/V           │ Coefficient modeling     │ Extracted from device   │
-│          │            │ modulation              │               │ channel length           │ characteristics         │
-│          │            │                         │               │ modulation effect        │                         │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ Cj0      │ 1.0000e-12 │ Zero-bias junction      │ F             │ Capacitance of           │ Device datasheet or     │
-│          │            │ capacitance             │               │ reverse-biased junction  │ junction modeling       │
-│          │            │                         │               │ at zero bias             │                         │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ Vbi      │ 0.7000     │ Built-in potential      │ V             │ Built-in voltage of the  │ Physical constant or    │
-│          │            │                         │               │ PN junction              │ device parameter        │
-├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ m        │ 0.5000     │ Grading coefficient     │ dimensionless │ Exponent describing      │ Device physics or       │
-│          │            │                         │               │ junction capacitance     │ datasheet               │
-│          │            │                         │               │ voltage dependence       │                         │
-└──────────┴────────────┴─────────────────────────┴───────────────┴──────────────────────────┴─────────────────────────┘
+┏━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Quantity  ┃ Value      ┃ Equation                ┃ Unit          ┃ Description             ┃ Source                  ┃
+┡━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Vth0      │ 1.0000     │ Vth0                    │ V             │ Threshold voltage at    │ BSIM3v3 model default   │
+│           │            │                         │               │ 300 K                   │ or extracted from       │
+│           │            │                         │               │                         │ I_D-V_GS curve          │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ kT        │ 0.0020     │ dVth/dT                 │ V/K           │ Vth temperature         │ Estimated or from       │
+│           │            │                         │               │ coefficient             │ temperature-dependent   │
+│           │            │                         │               │                         │ characterization        │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ mu0       │ 0.0500     │ μ_eff(T) = μ0 *         │ m^2/V·s       │ Low-field effective     │ Extracted from          │
+│           │            │ (T0/T)^μ_exp            │               │ mobility at 300 K       │ transconductance or CV  │
+│           │            │                         │               │                         │ measurements            │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ mu_exp    │ 1.5000     │ μ_eff ∝ T^(-mu_exp)     │ dimensionless │ Mobility temperature    │ Fitted from             │
+│           │            │                         │               │ exponent                │ temperature-dependent   │
+│           │            │                         │               │                         │ mobility data           │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ Cox       │ 0.0034     │ ε_ox / tox              │ F/m²          │ Gate oxide capacitance  │ Derived from oxide      │
+│           │            │                         │               │ per unit area           │ thickness and           │
+│           │            │                         │               │                         │ permittivity            │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ W         │ 1.0000e-04 │ W                       │ m             │ MOSFET channel width    │ Device layout/design    │
+│           │            │                         │               │                         │ specification           │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ L         │ 1.0000e-06 │ L                       │ m             │ MOSFET channel length   │ Device layout/design    │
+│           │            │                         │               │                         │ specification           │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ lambda    │ 0.0200     │ I_D ∝ (1 + λV_DS)       │ 1/V           │ Channel-length          │ Extracted from output   │
+│           │            │                         │               │ modulation parameter    │ conductance in          │
+│           │            │                         │               │                         │ saturation              │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ Cj0       │ 1.0000e-12 │ Cj(V) = Cj0 / (1 +      │ F             │ Zero-bias junction      │ Datasheet or junction   │
+│           │            │ V/Vj)^m                 │               │ capacitance             │ CV characterization     │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ Vbi       │ 0.7000     │ Vbi = kT/q * ln(Na * Nd │ V             │ Built-in potential of   │ Semiconductor physics   │
+│           │            │ / ni^2)                 │               │ junction                │ textbook (e.g., Sze)    │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ q         │ 1.6000e-19 │ Fundamental constant    │ C             │ Elementary charge       │ Physics constant        │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ k         │ 1.3800e-23 │ Fundamental constant    │ J/K           │ Boltzmann constant      │ Physics constant        │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ eps_sic   │ 9.7000e-11 │ ε_r * ε_0, with ε_r ≈   │ F/m           │ Permittivity of silicon │ Material properties     │
+│           │            │ 9.7                     │               │ carbide (SiC)           │ database                │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ eps_ox    │ 3.4500e-11 │ ε_r * ε_0, with ε_r ≈   │ F/m           │ Permittivity of SiO₂    │ Semiconductor physics   │
+│           │            │ 3.9                     │               │                         │ reference               │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ tox       │ 5.0000e-09 │ t_ox                    │ m             │ Oxide thickness         │ Device design or        │
+│           │            │                         │               │                         │ measured by             │
+│           │            │                         │               │                         │ ellipsometry            │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ ni        │ 1.5000e+08 │ ni = sqrt(Nc * Nv) *    │ 1/cm³         │ Intrinsic carrier       │ Semiconductor physics   │
+│           │            │ exp(-Eg/(2kT))          │               │ concentration (Si at    │ data (Sze)              │
+│           │            │                         │               │ 300K)                   │                         │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ PPW       │ 1.0000e+17 │ Na                      │ 1/cm³         │ P-well doping           │ Process parameter       │
+│           │            │                         │               │ concentration           │                         │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ NJFET     │ 1.0000e+22 │ Nd                      │ 1/m³          │ JFET region doping      │ Derived from process    │
+│           │            │                         │               │                         │ specifications          │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ Nsurf     │ 1.0000e+17 │ Nd or Na depending on   │ 1/cm³         │ Surface doping          │ Process specification   │
+│           │            │ type                    │               │ concentration           │ or literature           │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ XJPW      │ 1.0000e-07 │ x_junction              │ m             │ P-well junction depth   │ Process parameter (ion  │
+│           │            │                         │               │                         │ implant & diffusion)    │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ dpw       │ 1.0000e-06 │ dpw                     │ m             │ P-well separation       │ Layout rule /           │
+│           │            │                         │               │                         │ technology parameter    │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ mu        │ 0.0100     │ μ_eff                   │ m²/V·s        │ Carrier mobility        │ Extracted from CV or    │
+│           │            │                         │               │                         │ I_D-V_GS measurements   │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ H_by_eff  │ 1.0000e-07 │ Used in fringing and    │ m             │ Effective channel       │ Layout or parasitic     │
+│           │            │ parasitic capacitance   │               │ height                  │ modeling                │
+│           │            │ models                  │               │                         │                         │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ VFB       │ -1         │ VFB = Φms - Qox/Cox     │ V             │ Flatband voltage        │ CV characterization or  │
+│           │            │                         │               │                         │ literature              │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ Vsurf     │ 2          │ Vsurf                   │ V             │ Surface potential       │ Capacitance modeling    │
+│           │            │                         │               │ transition voltage      │ (empirical)             │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ mjsurf    │ 0.5000     │ mjsurf                  │ dimensionless │ Junction grading        │ Standard value for      │
+│           │            │                         │               │ coefficient (surface)   │ abrupt junctions        │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ mj        │ 0.5000     │ mj                      │ dimensionless │ Junction grading        │ Standard value for      │
+│           │            │                         │               │ coefficient (bulk)      │ abrupt junctions        │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ Vj        │ 0.7000     │ Vj                      │ V             │ Built-in potential for  │ Extracted from CV or    │
+│           │            │                         │               │ junction capacitance    │ default for Si          │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ m         │ 0.5000     │ m                       │ dimensionless │ CDS junction grading    │ Standard assumption for │
+│           │            │                         │               │ coefficient             │ abrupt junction         │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ C_overlap │ 1.0000e-12 │ C_ov                    │ F             │ Overlap capacitance     │ Parasitic extraction or │
+│           │            │                         │               │ between gate and        │ estimated               │
+│           │            │                         │               │ source/drain            │                         │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ phiF      │ 0.3000     │ φ_F = kT/q ln(Na/ni)    │ V             │ Fermi potential         │ Process dependent       │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ gamma     │ 0.4000     │ γ = √(2qε_si N_A)/C_ox  │ √V            │ Body-effect coefficient │ BSIM3 param             │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ eta       │ 0.1000     │ ΔVth ≈ η·Vds            │ -             │ DIBL coefficient        │ BSIM3 param             │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ theta1    │ 0.1000     │ μ_eff ∝ 1 / (1 +        │ 1/V           │ Mobility degradation    │ BSIM3 param             │
+│           │            │ θ1·Vgt)                 │               │ due to Vgt              │                         │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ theta2    │ 0.0100     │ μ_eff ∝ 1 / (1 +        │ 1/V           │ Mobility degradation    │ BSIM3 param             │
+│           │            │ θ2·Vds)                 │               │ due to Vds              │                         │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ Vsat      │ 1.0000e+05 │ Vsat                    │ m/s           │ Carrier saturation      │ Physical constant       │
+│           │            │                         │               │ velocity                │                         │
+├───────────┼────────────┼─────────────────────────┼───────────────┼─────────────────────────┼─────────────────────────┤
+│ alpha_sat │ 0.3000     │ Vsat = Vsat / (1 +      │ -             │ Saturation velocity     │ BSIM3 param             │
+│           │            │ α·E_eff)                │               │ roll-off                │                         │
+└───────────┴────────────┴─────────────────────────┴───────────────┴─────────────────────────┴─────────────────────────┘

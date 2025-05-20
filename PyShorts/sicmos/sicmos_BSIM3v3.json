@@ -1,79 +1,213 @@
 {
-    "Vth0": {
-        "value": 1.0,
-        "equation": "Threshold voltage at 300K",
-        "unit": "V",
-        "description": "Threshold voltage of the MOSFET at 300 K",
-        "source": "Device datasheet or experimental extraction"
-    },
-    "kT": {
-        "value": 0.002,
-        "equation": "Vth temperature coefficient",
-        "unit": "V/K",
-        "description": "Coefficient for threshold voltage temperature dependence",
-        "source": "Device datasheet or model parameter"
-    },
-    "mu0": {
-        "value": 0.05,
-        "equation": "Effective mobility at 300K",
-        "unit": "m^2/V\u00b7s",
-        "description": "Carrier mobility in channel at 300 K",
-        "source": "Model parameter from literature or datasheet"
-    },
-    "mu_exp": {
-        "value": 1.5,
-        "equation": "Mobility degradation exponent",
-        "unit": "dimensionless",
-        "description": "Exponent modeling mobility dependence on temperature",
-        "source": "Fitted parameter from experiments"
-    },
-    "Cox": {
-        "value": 0.00345,
-        "equation": "eps_ox / t_ox",
-        "unit": "F/m^2",
-        "description": "Capacitance of gate oxide per unit area",
-        "source": "Calculated from oxide thickness and permittivity"
-    },
-    "W": {
-        "value": 0.0001,
-        "equation": "Transistor width",
-        "unit": "m",
-        "description": "Channel width of the MOSFET",
-        "source": "Design layout parameter"
-    },
-    "L": {
-        "value": 1e-06,
-        "equation": "Channel length",
-        "unit": "m",
-        "description": "Channel length of the MOSFET",
-        "source": "Design layout parameter"
-    },
-    "lambda": {
-        "value": 0.02,
-        "equation": "Channel length modulation",
-        "unit": "1/V",
-        "description": "Coefficient modeling channel length modulation effect",
-        "source": "Extracted from device characteristics"
-    },
-    "Cj0": {
-        "value": 1e-12,
-        "equation": "Zero-bias junction capacitance",
-        "unit": "F",
-        "description": "Capacitance of reverse-biased junction at zero bias",
-        "source": "Device datasheet or junction modeling"
-    },
-    "Vbi": {
-        "value": 0.7,
-        "equation": "Built-in potential",
-        "unit": "V",
-        "description": "Built-in voltage of the PN junction",
-        "source": "Physical constant or device parameter"
-    },
-    "m": {
-        "value": 0.5,
-        "equation": "Grading coefficient",
-        "unit": "dimensionless",
-        "description": "Exponent describing junction capacitance voltage dependence",
-        "source": "Device physics or datasheet"
-    }
-}
+  "Vth0": {
+    "value": 1.0,
+    "unit": "V",
+    "description": "Threshold voltage at 300 K",
+    "equation": "Vth0",
+    "source": "BSIM3v3 model default or extracted from I_D-V_GS curve"
+  },
+  "kT": {
+    "value": 0.002,
+    "unit": "V/K",
+    "description": "Vth temperature coefficient",
+    "equation": "dVth/dT",
+    "source": "Estimated or from temperature-dependent characterization"
+  },
+  "mu0": {
+    "value": 0.05,
+    "unit": "m^2/V·s",
+    "description": "Low-field effective mobility at 300 K",
+    "equation": "μ_eff(T) = μ0 * (T0/T)^μ_exp",
+    "source": "Extracted from transconductance or CV measurements"
+  },
+  "mu_exp": {
+    "value": 1.5,
+    "unit": "dimensionless",
+    "description": "Mobility temperature exponent",
+    "equation": "μ_eff ∝ T^(-mu_exp)",
+    "source": "Fitted from temperature-dependent mobility data"
+  },
+  "Cox": {
+    "value": 0.00345,
+    "unit": "F/m²",
+    "description": "Gate oxide capacitance per unit area",
+    "equation": "ε_ox / tox",
+    "source": "Derived from oxide thickness and permittivity"
+  },
+  "W": {
+    "value": 1e-4,
+    "unit": "m",
+    "description": "MOSFET channel width",
+    "equation": "W",
+    "source": "Device layout/design specification"
+  },
+  "L": {
+    "value": 1e-6,
+    "unit": "m",
+    "description": "MOSFET channel length",
+    "equation": "L",
+    "source": "Device layout/design specification"
+  },
+  "lambda": {
+    "value": 0.02,
+    "unit": "1/V",
+    "description": "Channel-length modulation parameter",
+    "equation": "I_D ∝ (1 + λV_DS)",
+    "source": "Extracted from output conductance in saturation"
+  },
+  "Cj0": {
+    "value": 1e-12,
+    "unit": "F",
+    "description": "Zero-bias junction capacitance",
+    "equation": "Cj(V) = Cj0 / (1 + V/Vj)^m",
+    "source": "Datasheet or junction CV characterization"
+  },
+  "Vbi": {
+    "value": 0.7,
+    "unit": "V",
+    "description": "Built-in potential of junction",
+    "equation": "Vbi = kT/q * ln(Na * Nd / ni^2)",
+    "source": "Semiconductor physics textbook (e.g., Sze)"
+  },
+  "q": {
+    "value": 1.6e-19,
+    "unit": "C",
+    "description": "Elementary charge",
+    "equation": "Fundamental constant",
+    "source": "Physics constant"
+  },
+  "k": {
+    "value": 1.38e-23,
+    "unit": "J/K",
+    "description": "Boltzmann constant",
+    "equation": "Fundamental constant",
+    "source": "Physics constant"
+  },
+  "eps_sic": {
+    "value": 9.7e-11,
+    "unit": "F/m",
+    "description": "Permittivity of silicon carbide (SiC)",
+    "equation": "ε_r * ε_0, with ε_r ≈ 9.7",
+    "source": "Material properties database"
+  },
+  "eps_ox": {
+    "value": 3.45e-11,
+    "unit": "F/m",
+    "description": "Permittivity of SiO₂",
+    "equation": "ε_r * ε_0, with ε_r ≈ 3.9",
+    "source": "Semiconductor physics reference"
+  },
+  "tox": {
+    "value": 5e-9,
+    "unit": "m",
+    "description": "Oxide thickness",
+    "equation": "t_ox",
+    "source": "Device design or measured by ellipsometry"
+  },
+  "ni": {
+    "value": 1.5e8,
+    "unit": "1/cm³",
+    "description": "Intrinsic carrier concentration (Si at 300K)",
+    "equation": "ni = sqrt(Nc * Nv) * exp(-Eg/(2kT))",
+    "source": "Semiconductor physics data (Sze)"
+  },
+  "PPW": {
+    "value": 1e17,
+    "unit": "1/cm³",
+    "description": "P-well doping concentration",
+    "equation": "Na",
+    "source": "Process parameter"
+  },
+  "NJFET": {
+    "value": 1e22,
+    "unit": "1/m³",
+    "description": "JFET region doping",
+    "equation": "Nd",
+    "source": "Derived from process specifications"
+  },
+  "Nsurf": {
+    "value": 1e17,
+    "unit": "1/cm³",
+    "description": "Surface doping concentration",
+    "equation": "Nd or Na depending on type",
+    "source": "Process specification or literature"
+  },
+  "XJPW": {
+    "value": 1e-7,
+    "unit": "m",
+    "description": "P-well junction depth",
+    "equation": "x_junction",
+    "source": "Process parameter (ion implant & diffusion)"
+  },
+  "dpw": {
+    "value": 1e-6,
+    "unit": "m",
+    "description": "P-well separation",
+    "equation": "dpw",
+    "source": "Layout rule / technology parameter"
+  },
+  "mu": {
+    "value": 0.01,
+    "unit": "m²/V·s",
+    "description": "Carrier mobility",
+    "equation": "μ_eff",
+    "source": "Extracted from CV or I_D-V_GS measurements"
+  },
+  "H_by_eff": {
+    "value": 1e-7,
+    "unit": "m",
+    "description": "Effective channel height",
+    "equation": "Used in fringing and parasitic capacitance models",
+    "source": "Layout or parasitic modeling"
+  },
+  "VFB": {
+    "value": -1,
+    "unit": "V",
+    "description": "Flatband voltage",
+    "equation": "VFB = Φms - Qox/Cox",
+    "source": "CV characterization or literature"
+  },
+  "Vsurf": {
+    "value": 2,
+    "unit": "V",
+    "description": "Surface potential transition voltage",
+    "equation": "Vsurf",
+    "source": "Capacitance modeling (empirical)"
+  },
+  "mjsurf": {
+    "value": 0.5,
+    "unit": "dimensionless",
+    "description": "Junction grading coefficient (surface)",
+    "equation": "mjsurf",
+    "source": "Standard value for abrupt junctions"
+  },
+  "mj": {
+    "value": 0.5,
+    "unit": "dimensionless",
+    "description": "Junction grading coefficient (bulk)",
+    "equation": "mj",
+    "source": "Standard value for abrupt junctions"
+  },
+  "Vj": {
+    "value": 0.7,
+    "unit": "V",
+    "description": "Built-in potential for junction capacitance",
+    "equation": "Vj",
+    "source": "Extracted from CV or default for Si"
+  },
+  "m": {
+    "value": 0.5,
+    "unit": "dimensionless",
+    "description": "CDS junction grading coefficient",
+    "equation": "m",
+    "source": "Standard assumption for abrupt junction"
+  },
+  "C_overlap": {
+    "value": 1e-12,
+    "unit": "F",
+    "description": "Overlap capacitance between gate and source/drain",
+    "equation": "C_ov",
+    "source": "Parasitic extraction or estimated"
+  }
+ }
+

@@ -618,8 +618,8 @@ Plecs {
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "{\"DefaultSecSize\":100,\"FirstSecSize\":135,\"Labels\":["
-"],\"VisualIdxs\":[]}"
+      HeaderState   "{\"DefaultSecSize\":0,\"FirstSecSize\":135,\"Labels\":[],"
+"\"VisualIdxs\":[]}"
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
 "AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 "AAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAA"
@@ -984,13 +984,13 @@ Plecs {
       Branch {
         Points        [965, 290]
         Branch {
+          DstComponent  "id"
+          DstTerminal   1
+        }
+        Branch {
           Points        [1110, 290]
           DstComponent  "cds"
           DstTerminal   2
-        }
-        Branch {
-          DstComponent  "id"
-          DstTerminal   1
         }
       }
       Branch {
@@ -1213,13 +1213,13 @@ Plecs {
       SrcTerminal   1
       Points        [920, 130; 965, 130]
       Branch {
+        DstComponent  "id"
+        DstTerminal   2
+      }
+      Branch {
         Points        [1110, 130]
         DstComponent  "cds"
         DstTerminal   1
-      }
-      Branch {
-        DstComponent  "id"
-        DstTerminal   2
       }
     }
     Connection {
@@ -1340,4 +1340,4 @@ Plecs {
 " Vds, T, params);\n"
   }
 }
-DemoSignature "yvNGaCP+6kHLuwqfmC8mL73AP6mvF7Fz0/Ivfpa1v/w="
+DemoSignature "zyxkRmoqfsv8U/mrzatWybj95srW5GTGu/zfy+bp08w="
