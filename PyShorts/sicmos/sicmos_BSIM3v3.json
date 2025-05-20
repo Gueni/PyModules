@@ -29,7 +29,7 @@
     },
     "Cox": {
         "value": 0.00345,
-        "equation": "\u03b5_ox / t_ox",
+        "equation": "eps_ox / t_ox",
         "unit": "F/m^2",
         "description": "Capacitance of gate oxide per unit area",
         "source": "Calculated from oxide thickness and permittivity"

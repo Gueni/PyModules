@@ -16,7 +16,7 @@
 │          │            │ exponent                │               │ mobility dependence on   │ experiments             │
 │          │            │                         │               │ temperature              │                         │
 ├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤
-│ Cox      │ 0.0034     │ ε_ox / t_ox             │ F/m^2         │ Capacitance of gate      │ Calculated from oxide   │
+│ Cox      │ 0.0034     │ eps_ox / t_ox           │ F/m^2         │ Capacitance of gate      │ Calculated from oxide   │
 │          │            │                         │               │ oxide per unit area      │ thickness and           │
 │          │            │                         │               │                          │ permittivity            │
 ├──────────┼────────────┼─────────────────────────┼───────────────┼──────────────────────────┼─────────────────────────┤

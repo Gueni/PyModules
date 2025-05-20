@@ -49,31 +49,40 @@ def print_header(params, param_meta, log_file_path):
         f.write(plain_text)
 
 def mosfet_model(Vgs, Vds, T, params):
-    Vth         = params['Vth0'] - params['kT'] * (T - 300)
-    mu_eff      = params['mu0'] * (300 / T)**params['mu_exp'] 
-    Cox         = params['Cox']
-    W           = params['W']
-    L           = params['L']
-    Vgt         = Vgs - Vth
+    Vth     = params['Vth0'] - params['kT'] * (T - 300)
+    mu_eff  = params['mu0'] * (300 / T)**params['mu_exp']
+    Cox     = params['Cox']
+    W       = params['W']
+    L       = params['L']
+    Vgt     = Vgs - Vth
 
+    # Channel current and capacitances
     if Vgt <= 0:
-        Id      = 0.0
-        Cgs     = 0.0
-        Cgd     = 0.0
+        # Cutoff region — no channel formed
+        Id = 0.0
+        Cgs = Cox * W * L * 0.1  # Small fringing or overlap cap (~10%)
+        Cgd = Cox * W * L * 0.05 # Slight coupling may exist
     elif Vds < Vgt:
-        Id      = mu_eff * Cox * (W / L) * (Vgt * Vds - 0.5 * Vds**2)
-        Cgs     = (2 / 3) * Cox * W * L
-        Cgd     = (1 / 3) * Cox * W * L
+        # Linear region
+        Id  = mu_eff * Cox * (W / L) * (Vgt * Vds - 0.5 * Vds**2)
+        Cgs = (2 / 3) * Cox * W * L * (1 - Vds / (2 * Vgt))
+        Cgd = (1 / 3) * Cox * W * L * (1 + Vds / (2 * Vgt))
     else:
-        Id      = 0.5 * mu_eff * Cox * (W / L) * Vgt**2 * (1 + params['lambda'] * Vds)
-        Cgs     = (2 / 3) * Cox * W * L / 2
-        Cgd     = 0.0
+        # Saturation region
+        Id  = 0.5 * mu_eff * Cox * (W / L) * Vgt**2 * (1 + params['lambda'] * Vds)
 
-    Cj0         = params['Cj0']
-    Vbi         = params['Vbi']
-    m           = params['m']
-    Cds         = Cj0 / (1 + max(Vds, 0) / Vbi)**m
+        # Use Meyer model approximations in saturation
+        Cgs = (2 / 3) * Cox * W * L / 2 * (1 + np.exp(-(Vgs - Vth)))  # Smooth drop
+        Cgd = Cox * W * L * 0.1  # Overlap & weak coupling in saturation
+
+    # Reverse-biased junction cap (Cds) - always nonlinear
+    Cj0 = params['Cj0']
+    Vbi = params['Vbi']
+    m   = params['m']
+    Cds = Cj0 / (1 + max(Vds, 0) / Vbi)**m
+
     return {'Id': Id, 'Cgs': Cgs, 'Cgd': Cgd, 'Cds': Cds}
+
 
 def plot_results(Vgs_values, Vds_values, T_values, params, show=True):
     data = []
