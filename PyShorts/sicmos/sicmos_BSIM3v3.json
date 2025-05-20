@@ -1,0 +1,79 @@
+{
+    "Vth0": {
+        "value": 1.0,
+        "equation": "Threshold voltage at 300K",
+        "unit": "V",
+        "description": "Threshold voltage of the MOSFET at 300 K",
+        "source": "Device datasheet or experimental extraction"
+    },
+    "kT": {
+        "value": 0.002,
+        "equation": "Vth temperature coefficient",
+        "unit": "V/K",
+        "description": "Coefficient for threshold voltage temperature dependence",
+        "source": "Device datasheet or model parameter"
+    },
+    "mu0": {
+        "value": 0.05,
+        "equation": "Effective mobility at 300K",
+        "unit": "m^2/V\u00b7s",
+        "description": "Carrier mobility in channel at 300 K",
+        "source": "Model parameter from literature or datasheet"
+    },
+    "mu_exp": {
+        "value": 1.5,
+        "equation": "Mobility degradation exponent",
+        "unit": "dimensionless",
+        "description": "Exponent modeling mobility dependence on temperature",
+        "source": "Fitted parameter from experiments"
+    },
+    "Cox": {
+        "value": 0.00345,
+        "equation": "\u03b5_ox / t_ox",
+        "unit": "F/m^2",
+        "description": "Capacitance of gate oxide per unit area",
+        "source": "Calculated from oxide thickness and permittivity"
+    },
+    "W": {
+        "value": 0.0001,
+        "equation": "Transistor width",
+        "unit": "m",
+        "description": "Channel width of the MOSFET",
+        "source": "Design layout parameter"
+    },
+    "L": {
+        "value": 1e-06,
+        "equation": "Channel length",
+        "unit": "m",
+        "description": "Channel length of the MOSFET",
+        "source": "Design layout parameter"
+    },
+    "lambda": {
+        "value": 0.02,
+        "equation": "Channel length modulation",
+        "unit": "1/V",
+        "description": "Coefficient modeling channel length modulation effect",
+        "source": "Extracted from device characteristics"
+    },
+    "Cj0": {
+        "value": 1e-12,
+        "equation": "Zero-bias junction capacitance",
+        "unit": "F",
+        "description": "Capacitance of reverse-biased junction at zero bias",
+        "source": "Device datasheet or junction modeling"
+    },
+    "Vbi": {
+        "value": 0.7,
+        "equation": "Built-in potential",
+        "unit": "V",
+        "description": "Built-in voltage of the PN junction",
+        "source": "Physical constant or device parameter"
+    },
+    "m": {
+        "value": 0.5,
+        "equation": "Grading coefficient",
+        "unit": "dimensionless",
+        "description": "Exponent describing junction capacitance voltage dependence",
+        "source": "Device physics or datasheet"
+    }
+}
