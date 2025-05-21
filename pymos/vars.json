@@ -44,6 +44,5 @@
     "lambda_": {"value": 0.7,"unit": "V","description": "Threshold voltage"},
     "theta": {"value": 0.7,"unit": "V","description": "Threshold voltage"},
     "Vth": {"value": 0.7,"unit": "V","description": "Threshold voltage"},
-
     "alpha": {"value": 5e-9,"unit": "m","description": "Oxide thickness"}
 }
