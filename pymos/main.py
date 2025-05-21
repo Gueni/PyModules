@@ -36,7 +36,7 @@ Vgs_values = np.linspace(0.0, 20.0, 9)           # 0V to 20V
 Vds_values = np.linspace(0.0, 800.0, 9)          # 0V to 800V
 T_values   = [300, 325, 350, 375, 400, 425, 450] # Kelvin
 
-Plot = False
+Plot = True
 # Paths for data output
 DATA_DIR = "data"
 os.makedirs(DATA_DIR, exist_ok=True)
