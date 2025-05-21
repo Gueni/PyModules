@@ -1,4 +1,3 @@
-# D:\WORKSPACE\Python_code\pymos\Plot.py
 
 import pandas as pd
 import matplotlib.pyplot as plt
