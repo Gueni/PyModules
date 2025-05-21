@@ -1,8 +1,28 @@
 
+#!/usr/bin/env python
+# coding=utf-8
+#? -------------------------------------------------------------------------------
+#?
+#?                 ______  ____  _______  _____
+#?                / __ \ \/ /  |/  / __ \/ ___/
+#?               / /_/ /\  / /|_/ / / / /\__ \
+#?              / ____/ / / /  / / /_/ /___/ /
+#?             /_/     /_/_/  /_/\____//____/
+#?
+#? Name:        Plot.py
+#? Purpose:     Plot simulation outputs such as I-V and C-V curves
+#?
+#? Author:      Mohamed Gueni (mohamedgueni@outlook.com)
+#?
+#? Created:     21/05/2025
+#? Licence:     Refer to the LICENSE file
+#? -------------------------------------------------------------------------------
+
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-
+#? -------------------------------------------------------------------------------
 class MOSFETPlotter:
     def __init__(self, csv_path):
         if not os.path.exists(csv_path):
@@ -61,8 +81,9 @@ class MOSFETPlotter:
         ax.grid(True)
         ax.legend()
 
-
+#? -------------------------------------------------------------------------------
 if __name__ == "__main__":
     csv_path = r'D:\WORKSPACE\Python_code\pymos\data\shichman_hodges.csv'
     plotter = MOSFETPlotter(csv_path)
     plotter.plot()
+#? -------------------------------------------------------------------------------

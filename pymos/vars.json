@@ -28,5 +28,22 @@
     "mj": {"value": 0.5, "unit": "1", "desc": "Bulk junction grading coefficient"},
     "Vj": {"value": 0.7, "unit": "V", "desc": "Junction built-in potential"},
     "m": {"value": 0.5, "unit": "1", "desc": "CDS junction grading coefficient"},
-    "C_overlap": {"value": 1e-12, "unit": "F", "desc": "Overlap capacitance"}
+    "C_overlap": {"value": 1e-12, "unit": "F", "desc": "Overlap capacitance"},
+    "Cj": {"value": 1e-12, "unit": "F", "desc": "Junction capacitance"},
+    "Vj0": {"value": 0.7, "unit": "V", "desc": "Zero-bias junction potential"},
+    "Vjsw": {"value": 0.7, "unit": "V", "desc": "Sidewall junction potential"},
+    "Cjsw": {"value": 1e-12, "unit": "F", "desc": "Sidewall junction capacitance"},
+    "Cjswg": {"value": 1e-12, "unit": "F", "desc": "Gate-sidewall junction capacitance"},
+    "Cjsw0": {"value": 1e-12, "unit": "F", "desc": "Zero-bias sidewall junction capacitance"},
+    "Vjsw0": {"value": 0.7, "unit": "V", "desc": "Zero-bias sidewall junction potential"},
+    "Vjsw1": {"value": 0.7, "unit": "V", "desc": "Sidewall junction potential"},
+    "Cjsw1": {"value": 1e-12, "unit": "F", "desc": "Sidewall junction capacitance"},
+    "Cjswg1": {"value": 1e-12, "unit": "F", "desc": "Gate-sidewall junction capacitance"},
+    "Cjsw01": {"value": 1e-12, "unit": "F", "desc": "Zero-bias sidewall junction capacitance"},
+    "C_ox": {"value": 0.02,"unit": "F/m²","description": "Oxide capacitance per unit area"},
+    "lambda_": {"value": 0.7,"unit": "V","description": "Threshold voltage"},
+    "theta": {"value": 0.7,"unit": "V","description": "Threshold voltage"},
+    "Vth": {"value": 0.7,"unit": "V","description": "Threshold voltage"},
+
+    "alpha": {"value": 5e-9,"unit": "m","description": "Oxide thickness"}
 }

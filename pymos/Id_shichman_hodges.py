@@ -1,28 +1,42 @@
-# -*- coding: utf-8 -*-
 
-import json
-import Equations 
+#!/usr/bin/env python
+# coding=utf-8
+#? -------------------------------------------------------------------------------
+#?
+#?                 ______  ____  _______  _____
+#?                / __ \ \/ /  |/  / __ \/ ___/
+#?               / /_/ /\  / /|_/ / / / /\__ \
+#?              / ____/ / / /  / / /_/ /___/ /
+#?             /_/     /_/_/  /_/\____//____/
+#?
+#? Name:        Id_shichman_hodges.py
+#? Purpose:     Compute drain current using the Shichman-Hodges model
+#?
+#? Author:      Mohamed Gueni (mohamedgueni@outlook.com)
+#?
+#? Created:     21/05/2025
+#? Licence:     Refer to the LICENSE file
+#? -------------------------------------------------------------------------------
 
 
+import Log 
+import Equations
+#? -------------------------------------------------------------------------------
 class ShichmanHodgesModel:
     def __init__(self, param_path=None):
-        if param_path is None:
-            param_path = r'D:\WORKSPACE\Python_code\pymos\vars.json'
-        self.params = self._load_parameters(param_path)
-        self._extract_params()
+        logger          = Log.Logger()
+        self.params          = logger.load_parameters()
 
-    def _load_parameters(self, path):
-        with open(path, "r") as f:
-            data = json.load(f)
-        return {k: v["value"] for k, v in data.items()}
-
-    def _extract_params(self):
-        self.mu = 0.02     # Mobility (m^2/Vs)
-        self.C_ox = 0.02    # Oxide capacitance (F/m^2)
-        self.W = self.params["W"]           # Channel width (m)
-        self.L = self.params["L"]           # Channel length (m)
-        self.Vth = 1.0                      # Threshold voltage (V)
-        self.lambda_ = 0.02                 # Channel-length modulation (1/V)
+        self.mu         = self.params["mu_exp"] * 1e-4  # Convert to m^2/Vs
+        self.C_ox       = self.params["C_ox"]                   # Oxide capacitance (F/m²)
+        self.Vth        = self.params["Vth"]                    # Threshold voltage (V), manually defined
+        self.alpha      = self.params["alpha"]                  # Charge partitioning factor
+        self.W          = self.params["W"]               # Channel width (m)
+        self.L          = self.params["L"]               # Channel length (m)
+        self.theta      = self.params["theta"]               # Channel length (m)
+        self.lambda_    = self.params["lambda_"]               # Channel length (m)
+        self.tox        = self.params["tox"]               # Channel length (m)
+        self.T          = 300                               # Temperature (K)
 
     def compute_Id(self, Vgs, Vds):
         V_ov = Vgs - self.Vth
@@ -41,11 +55,11 @@ class ShichmanHodgesModel:
 
         return Equations.Equations.clip(Id)
 
-
-# Optional test
+#? -------------------------------------------------------------------------------
 if __name__ == "__main__":
     model = ShichmanHodgesModel()
-    Vgs = 2.0
-    Vds = 1.5
+    Vgs = 15
+    Vds = 600
     Id = model.compute_Id(Vgs, Vds)
     print(f"ID_ShichmanHodges(Vgs={Vgs}, Vds={Vds}) = {Id:.6e} A")
+#? -------------------------------------------------------------------------------

@@ -1,25 +1,38 @@
-# D:\WORKSPACE\Python_code\pymos\Caps_shichman_hodges.py
 
-import numpy as np
-import json
-import os
+#!/usr/bin/env python
+# coding=utf-8
+#? -------------------------------------------------------------------------------
+#?
+#?                 ______  ____  _______  _____
+#?                / __ \ \/ /  |/  / __ \/ ___/
+#?               / /_/ /\  / /|_/ / / / /\__ \
+#?              / ____/ / / /  / / /_/ /___/ /
+#?             /_/     /_/_/  /_/\____//____/
+#?
+#? Name:        Caps_shichman_hodges.py
+#? Purpose:     Compute intrinsic capacitances using the Shichman-Hodges model
+#?
+#? Author:      Mohamed Gueni (mohamedgueni@outlook.com)
+#?
+#? Created:     21/05/2025
+#? Licence:     Refer to the LICENSE file
+#? -------------------------------------------------------------------------------
+
+
+import Log 
 from Equations import Equations
-
-
+#? -------------------------------------------------------------------------------
 class ShichmanHodgesCapacitances:
     def __init__(self):
-        self.params = self.load_parameters()
-        self.C_ox = 0.02
-        self.W = self.params["W"]
-        self.L = self.params["L"]
-        self.Vth = 0.02
-        self.C_g_total = self.C_ox * self.W * self.L
+        logger          = Log.Logger()
+        self.params     = logger.load_parameters()
 
-    def load_parameters(self):
-        path = r'D:\WORKSPACE\Python_code\pymos\vars.json'
-        with open(path, "r") as f:
-            data = json.load(f)
-        return {k: v["value"] for k, v in data.items()}
+        self.C_ox       = self.params["C_ox"]                   # Oxide capacitance (F/m²)
+        self.Vth        = self.params["Vth"]                    # Threshold voltage (V), manually defined
+        self.alpha      = self.params["alpha"]                  # Charge partitioning factor
+        self.W          = self.params["W"]                      # Width (m)
+        self.L          = self.params["L"]                      # Length (m)
+        self.C_g_total  = self.C_ox * self.W * self.L
 
     def compute(self, Vgs, Vds):
         V_ov = Equations.clip(Vgs - self.Vth)
@@ -41,12 +54,12 @@ class ShichmanHodgesCapacitances:
             Cds = 0.0
 
         return Cgs, Cgd, Cds
+#? -------------------------------------------------------------------------------
 
-
-# # Optional test
-# if __name__ == "__main__":
-#     Vgs = 2.0
-#     Vds = 1.0
-#     cap_model = ShichmanHodgesCapacitances()
-#     Cgs, Cgd, Cds = cap_model.compute(Vgs, Vds)
-#     print(f"Caps (Shichman-Hodges) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
+if __name__ == "__main__":
+    Vgs = 2.0
+    Vds = 1.0
+    cap_model = ShichmanHodgesCapacitances()
+    Cgs, Cgd, Cds = cap_model.compute(Vgs, Vds)
+    print(f"Caps (Shichman-Hodges) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
+#? -------------------------------------------------------------------------------

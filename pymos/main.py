@@ -1,4 +1,24 @@
-# -*- coding: utf-8 -*-
+
+#!/usr/bin/env python
+# coding=utf-8
+#? -------------------------------------------------------------------------------
+#?
+#?                 ______  ____  _______  _____
+#?                / __ \ \/ /  |/  / __ \/ ___/
+#?               / /_/ /\  / /|_/ / / / /\__ \
+#?              / ____/ / / /  / / /_/ /___/ /
+#?             /_/     /_/_/  /_/\____//____/
+#?
+#? Name:        main.py
+#? Purpose:     Main entry point for running simulations using the pymos models
+#?
+#? Author:      Mohamed Gueni (mohamedgueni@outlook.com)
+#?
+#? Created:     21/05/2025
+#? Licence:     Refer to the LICENSE file
+#? -------------------------------------------------------------------------------
+
+
 import numpy as np
 import pandas as pd
 import os
@@ -10,7 +30,7 @@ from Plot import MOSFETPlotter
 from plot_compare import MOSFETModelComparer
 import Log
 import json
-
+#? -------------------------------------------------------------------------------
 # Simulation sweep settings
 Vgs_values = np.linspace(0.0, 20.0, 9)           # 0V to 20V
 Vds_values = np.linspace(0.0, 800.0, 9)          # 0V to 800V
@@ -25,7 +45,7 @@ BSIM3_PATH = os.path.join(DATA_DIR, "BSIM3v3.csv")
 json_path = r'D:\WORKSPACE\Python_code\pymos\vars.json'
 with open(json_path, 'r') as file:
     data_dict = json.load(file)
-
+#? -------------------------------------------------------------------------------
 def main():
     # Instantiate models
     sh_model = Id_shichman_hodges.ShichmanHodgesModel()
@@ -94,6 +114,7 @@ def main():
         print("Comparing Shichman-Hodges and BSIM3v3...")
         compare_plotter = MOSFETModelComparer(SH_PATH, BSIM3_PATH)
         compare_plotter.plot()
-
+#? -------------------------------------------------------------------------------
 if __name__ == "__main__":
     main()
+#? -------------------------------------------------------------------------------

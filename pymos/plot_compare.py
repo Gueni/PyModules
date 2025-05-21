@@ -1,9 +1,28 @@
-# D:\WORKSPACE\Python_code\pymos\plot_compare.py
+
+#!/usr/bin/env python
+# coding=utf-8
+#? -------------------------------------------------------------------------------
+#?
+#?                 ______  ____  _______  _____
+#?                / __ \ \/ /  |/  / __ \/ ___/
+#?               / /_/ /\  / /|_/ / / / /\__ \
+#?              / ____/ / / /  / / /_/ /___/ /
+#?             /_/     /_/_/  /_/\____//____/
+#?
+#? Name:        plot_compare.py
+#? Purpose:     Plot and compare simulation results from different MOSFET models
+#?
+#? Author:      Mohamed Gueni (mohamedgueni@outlook.com)
+#?
+#? Created:     21/05/2025
+#? Licence:     Refer to the LICENSE file
+#? -------------------------------------------------------------------------------
+
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+#? -------------------------------------------------------------------------------
 class MOSFETModelComparer:
     def __init__(self, csv1_path, csv2_path):
         self.df1 = pd.read_csv(csv1_path)
@@ -87,10 +106,11 @@ class MOSFETModelComparer:
         ax.set_ylabel('Id [A]')
         ax.legend()
         ax.grid(True)
-
+#? -------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     csv1 = r'D:\WORKSPACE\Python_code\pymos\data\shichman_hodges.csv'
     csv2 = r'D:\WORKSPACE\Python_code\pymos\data\BSIM3v3.csv'
     comparer = MOSFETModelComparer(csv1, csv2)
     comparer.plot()
+#? -------------------------------------------------------------------------------
