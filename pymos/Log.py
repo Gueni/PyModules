@@ -15,21 +15,20 @@ class Logger:
 
     def log(self, quantities):
         self._write_txt_log(quantities)
-        self._write_json_log(quantities)
         print(f"Logged to:\n- {self.log_path_txt}\n- {self.log_path_json}")
 
     def _write_txt_log(self, quantities):
         with open(self.log_path_txt, "w") as txt_file:
+            txt_file.write("=" * 100 + "\n")
             txt_file.write(f"# Log generated on {datetime.now()}\n")
-            txt_file.write(f"{'Quantity':<25}{'Value':<15}{'Equation':<30}{'Unit':<10}{'Description':<40}{'Source':<15}\n")
-            txt_file.write("=" * 135 + "\n")
-            for key, entry in quantities.items():
-                txt_file.write(f"{key:<25}{entry['value']:<15g}{entry['equation']:<30}{entry['unit']:<10}{entry['description']:<40}{entry['source']:<15}\n")
+            txt_file.write("=" * 100 + "\n")
+            txt_file.write(f"{'Quantity':<25}{'Value':<15}{'Unit':<10}{'Description':<40}\n")
+            txt_file.write("=" * 100 + "\n")
+            items = list(quantities.items())
+            for i, (key, entry) in enumerate(items):
+                txt_file.write(f"{key:<25}{entry['value']:<15g}{entry.get('unit', ''):<10}{entry.get('desc', ''):<60}\n")
+                if i < len(items) - 1:
+                    txt_file.write("-" * 100 + "\n")
+            txt_file.write("=" * 100 + "\n")
 
 
-# # Optional test
-# if __name__ == "__main__":
-
-#     test_quantities = {}
-#     logger = Logger()
-#     logger.log(test_quantities)

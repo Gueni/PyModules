@@ -7,7 +7,7 @@ import Equations
 class ShichmanHodgesModel:
     def __init__(self, param_path=None):
         if param_path is None:
-            param_path = r'D:\WORKSPACE\Python_code\pymos\data\vars.json'
+            param_path = r'D:\WORKSPACE\Python_code\pymos\vars.json'
         self.params = self._load_parameters(param_path)
         self._extract_params()
 

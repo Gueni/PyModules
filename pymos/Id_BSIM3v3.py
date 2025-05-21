@@ -5,7 +5,7 @@ import Equations
 class BSIM3v3Model:
     def __init__(self, param_path=None):
         if param_path is None:
-            param_path = r'D:\WORKSPACE\Python_code\pymos\data\vars.json'
+            param_path = r'D:\WORKSPACE\Python_code\pymos\vars.json'
         self.params = self._load_parameters(param_path)
         self._extract_params()
 
@@ -22,7 +22,7 @@ class BSIM3v3Model:
         self.Vth = 0.1                          # Threshold voltage (V)
         self.theta = 0.02                       # Mobility degradation factor
         self.lambda_ = 0.02                     # Channel-length modulation
-        self.tox = self.params["tox"]           # Oxide thickness (m)
+        self.tox = 0.02           # Oxide thickness (m)
         self.T = self.params.get("T", 300)      # Temperature (K)
         
     def compute_Id(self, Vgs, Vds):

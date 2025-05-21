@@ -17,7 +17,7 @@ class BSIM3v3Capacitances:
         self.C_g_total = self.C_ox * self.W * self.L
 
     def load_parameters(self):
-        path = r'D:\WORKSPACE\Python_code\pymos\data\vars.json'
+        path = r'D:\WORKSPACE\Python_code\pymos\vars.json'
         with open(path, "r") as f:
             data = json.load(f)
         return {k: v["value"] for k, v in data.items()}

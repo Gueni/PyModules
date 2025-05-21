@@ -1,30 +1,32 @@
-{
-    "mu_0": {
-        "value": 0.05,
-        "equation": "given",
-        "unit": "m^2/Vs",
-        "description": "Low-field mobility",
-        "source": "model"
-    },
-    "C_ox": {
-        "value": 0.00345,
-        "equation": "eps_ox / tox",
-        "unit": "F/m^2",
-        "description": "Oxide capacitance per unit area",
-        "source": "model"
-    },
-    "W": {
-        "value": 0.0001,
-        "equation": "given",
-        "unit": "m",
-        "description": "Channel width",
-        "source": "model"
-    },
-    "L": {
-        "value": 1e-06,
-        "equation": "given",
-        "unit": "m",
-        "description": "Channel length",
-        "source": "model"
-    }
+ {
+    "Vth0": {"value": 1.0, "unit": "V", "desc": "Threshold voltage at 300 K"},
+    "kT": {"value": 0.002, "unit": "V/K", "desc": "Vth temperature coefficient"},
+    "mu0": {"value": 0.05, "unit": "m^2/Vs", "desc": "Low-field mobility at 300 K"},
+    "mu_exp": {"value": 1.5, "unit": "1", "desc": "Mobility temperature exponent"},
+    "Cox": {"value": 0.00345, "unit": "F/m^2", "desc": "Gate oxide capacitance per unit area"},
+    "W": {"value": 1e-4, "unit": "m", "desc": "MOSFET channel width"},
+    "L": {"value": 1e-6, "unit": "m", "desc": "MOSFET channel length"},
+    "lambda": {"value": 0.02, "unit": "1/V", "desc": "Channel-length modulation"},
+    "Cj0": {"value": 1e-12, "unit": "F", "desc": "Zero-bias junction capacitance"},
+    "Vbi": {"value": 0.7, "unit": "V", "desc": "Built-in junction potential"},
+    "q": {"value": 1.6e-19, "unit": "C", "desc": "Elementary charge"},
+    "k": {"value": 1.38e-23, "unit": "J/K", "desc": "Boltzmann constant"},
+    "eps_sic": {"value": 9.7e-11, "unit": "F/m", "desc": "Permittivity of SiC"},
+    "eps_ox": {"value": 3.45e-11, "unit": "F/m", "desc": "Permittivity of SiO2"},
+    "tox": {"value": 5e-9, "unit": "m", "desc": "Oxide thickness"},
+    "ni": {"value": 1.5e8, "unit": "1/cm^3", "desc": "Intrinsic carrier concentration"},
+    "PPW": {"value": 1e17, "unit": "1/cm^3", "desc": "P-well doping"},
+    "NJFET": {"value": 1e22, "unit": "1/m^3", "desc": "JFET region doping"},
+    "Nsurf": {"value": 1e17, "unit": "1/cm^3", "desc": "Surface doping"},
+    "XJPW": {"value": 1e-7, "unit": "m", "desc": "P-well junction depth"},
+    "dpw": {"value": 1e-6, "unit": "m", "desc": "P-well separation"},
+    "mu": {"value": 0.01, "unit": "m^2/Vs", "desc": "Carrier mobility"},
+    "H_by_eff": {"value": 1e-7, "unit": "m", "desc": "Effective channel height"},
+    "VFB": {"value": -1.0, "unit": "V", "desc": "Flatband voltage"},
+    "Vsurf": {"value": 2.0, "unit": "V", "desc": "Surface potential transition"},
+    "mjsurf": {"value": 0.5, "unit": "1", "desc": "Surface junction grading coefficient"},
+    "mj": {"value": 0.5, "unit": "1", "desc": "Bulk junction grading coefficient"},
+    "Vj": {"value": 0.7, "unit": "V", "desc": "Junction built-in potential"},
+    "m": {"value": 0.5, "unit": "1", "desc": "CDS junction grading coefficient"},
+    "C_overlap": {"value": 1e-12, "unit": "F", "desc": "Overlap capacitance"}
 }
