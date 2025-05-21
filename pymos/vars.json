@@ -1,0 +1,30 @@
+{
+    "mu_0": {
+        "value": 0.05,
+        "equation": "given",
+        "unit": "m^2/Vs",
+        "description": "Low-field mobility",
+        "source": "model"
+    },
+    "C_ox": {
+        "value": 0.00345,
+        "equation": "eps_ox / tox",
+        "unit": "F/m^2",
+        "description": "Oxide capacitance per unit area",
+        "source": "model"
+    },
+    "W": {
+        "value": 0.0001,
+        "equation": "given",
+        "unit": "m",
+        "description": "Channel width",
+        "source": "model"
+    },
+    "L": {
+        "value": 1e-06,
+        "equation": "given",
+        "unit": "m",
+        "description": "Channel length",
+        "source": "model"
+    }
+}

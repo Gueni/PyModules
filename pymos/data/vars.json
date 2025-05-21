@@ -17,21 +17,21 @@
     "value": 0.05,
     "unit": "m^2/V·s",
     "description": "Low-field effective mobility at 300 K",
-    "equation": "μ_eff(T) = μ0 * (T0/T)^μ_exp",
+    "equation": "μ_eff(T) =  * (T0/T)^",
     "source": "Extracted from transconductance or CV measurements"
   },
   "mu_exp": {
     "value": 1.5,
     "unit": "dimensionless",
     "description": "Mobility temperature exponent",
-    "equation": "μ_eff ∝ T^(-mu_exp)",
+    "equation": "  T^(-mu_exp)",
     "source": "Fitted from temperature-dependent mobility data"
   },
   "Cox": {
     "value": 0.00345,
     "unit": "F/m²",
     "description": "Gate oxide capacitance per unit area",
-    "equation": "ε_ox / tox",
+    "equation": " / tox",
     "source": "Derived from oxide thickness and permittivity"
   },
   "W": {
@@ -52,7 +52,7 @@
     "value": 0.02,
     "unit": "1/V",
     "description": "Channel-length modulation parameter",
-    "equation": "I_D ∝ (1 + λV_DS)",
+    "equation": "I_D  (1 + )",
     "source": "Extracted from output conductance in saturation"
   },
   "Cj0": {
@@ -87,14 +87,14 @@
     "value": 9.7e-11,
     "unit": "F/m",
     "description": "Permittivity of silicon carbide (SiC)",
-    "equation": "ε_r * ε_0, with ε_r ≈ 9.7",
+    "equation": " * , with   9.7",
     "source": "Material properties database"
   },
   "eps_ox": {
     "value": 3.45e-11,
     "unit": "F/m",
     "description": "Permittivity of SiO₂",
-    "equation": "ε_r * ε_0, with ε_r ≈ 3.9",
+    "equation": " 3.9",
     "source": "Semiconductor physics reference"
   },
   "tox": {
@@ -150,7 +150,7 @@
     "value": 0.01,
     "unit": "m²/V·s",
     "description": "Carrier mobility",
-    "equation": "μ_eff",
+    "equation": "",
     "source": "Extracted from CV or I_D-V_GS measurements"
   },
   "H_by_eff": {
@@ -164,7 +164,7 @@
     "value": -1,
     "unit": "V",
     "description": "Flatband voltage",
-    "equation": "VFB = Φms - Qox/Cox",
+    "equation": "VFB =  - Qox/Cox",
     "source": "CV characterization or literature"
   },
   "Vsurf": {
@@ -210,4 +210,3 @@
     "source": "Parasitic extraction or estimated"
   }
  }
-

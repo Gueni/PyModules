@@ -1,160 +1,57 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from rich.table import Table
-from rich.console import Console
-import pandas as pd
+# -*- coding: utf-8 -*-
 import json
-import os
+import Equations
 
-def load_params_from_json(json_path):
-    with open(json_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    params = {key: entry['value'] for key, entry in data.items()}
-    meta = {key: {k: v for k, v in entry.items() if k != 'value'} for key, entry in data.items()}
-    return params, meta
+class BSIM3v3Model:
+    def __init__(self, param_path=None):
+        if param_path is None:
+            param_path = r'D:\WORKSPACE\Python_code\pymos\data\vars.json'
+        self.params = self._load_parameters(param_path)
+        self._extract_params()
 
-def print_header(params, param_meta, log_file_path):
-    table = Table(title="MOSFET Parameters", show_lines=True)
-    table.add_column("Quantity", no_wrap=True)
-    table.add_column("Value")
-    table.add_column("Equation")
-    table.add_column("Unit")
-    table.add_column("Description")
-    table.add_column("Source")
+    def _load_parameters(self, path):
+        with open(path, "r") as f:
+            data = json.load(f)
+        return {k: v["value"] for k, v in data.items()}
 
-    for param, meta in param_meta.items():
-        value = params.get(param, "N/A")
-        if isinstance(value, float):
-            if abs(value) < 1e-3 or abs(value) > 1e3:
-                value_str = f"{value:.4e}"  
-            else:
-                value_str = f"{value:.4f}"
+    def _extract_params(self):
+        self.mu_0 = 0.002         # Low-field mobility (cm^2/Vs)
+        self.C_ox = 0.002        # Oxide capacitance (F/m^2)
+        self.W = self.params["W"]               # Channel width (m)
+        self.L = self.params["L"]               # Channel length (m)
+        self.Vth = 0.1                          # Threshold voltage (V)
+        self.theta = 0.02                       # Mobility degradation factor
+        self.lambda_ = 0.02                     # Channel-length modulation
+        self.tox = self.params["tox"]           # Oxide thickness (m)
+        self.T = self.params.get("T", 300)      # Temperature (K)
+        
+    def compute_Id(self, Vgs, Vds):
+        Vt = Equations.Equations.thermal_voltage(self.T)
+        V_ov = Equations.Equations.surface_potential(self.Vth, Vgs)
+        V_ov_clipped = Equations.Equations.clip(V_ov)
+
+        # Effective mobility
+        E_eff = V_ov_clipped / self.tox
+        mu_eff = Equations.Equations.effective_mobility(self.mu_0, E_eff, self.theta)
+
+        # Saturation voltage
+        Vdsat = Equations.Equations.saturation_voltage(Vgs, self.Vth)
+
+        if Vds < Vdsat:
+            # Linear region
+            Id = mu_eff * self.C_ox * (self.W / self.L) * ((V_ov_clipped * Vds) - 0.5 * Vds ** 2)
         else:
-            value_str = str(value)
-        table.add_row(
-            param,
-            value_str,
-            meta.get("equation", ""),
-            meta.get("unit", ""),
-            meta.get("description", ""),
-            meta.get("source", ""),
-        )
+            # Saturation region
+            Id = 0.5 * mu_eff * self.C_ox * (self.W / self.L) * V_ov_clipped ** 2
+            Id *= Equations.Equations.channel_length_modulation(self.lambda_, Vds)
 
-    temp_console = Console(record=True, color_system=None, force_terminal=True, width=120)
-    temp_console.print(table)
-
-    plain_text = temp_console.export_text()
-
-    with open(log_file_path, "w", encoding="utf-8") as f:
-        f.write(plain_text)
-
-def mosfet_model(Vgs, Vds, T, params):
-    # Temperature-adjusted parameters
-    Vth         = params['Vth0'] - params['kT'] * (T - 300)
-    mu_eff      = params['mu0'] * (300 / T)**params['mu_exp'] 
-    Cox         = params['Cox']
-    W           = params['W']
-    L           = params['L']
-    Vgt         = Vgs - Vth
-    if Vgt <= 0:
-        Id      = 0.0  # Cutoff
-        Cgs     = 0.0
-        Cgd     = 0.0
-    elif Vds < Vgt: # Linear region 
-        Id      = mu_eff * Cox * (W / L) * (Vgt * Vds - 0.5 * Vds**2)
-        Cgs     = (2 / 3) * Cox * W * L
-        Cgd     = (1 / 3) * Cox * W * L
-    else: # Saturation region
-        Id      = 0.5 * mu_eff * Cox * (W / L) * Vgt**2 * (1 + params['lambda'] * Vds)
-        Cgs     = (2 / 3) * Cox * W * L / 2
-        Cgd     = 0.0  # Pinched off in saturation
-    # Cds (junction-based, reverse-biased)
-    Cj0         = params['Cj0']
-    Vbi         = params['Vbi']
-    m           = params['m']
-    Cds         = Cj0 / (1 + max(Vds, 0) / Vbi)**m
-    return {'Id'    : Id,'Cgs'   : Cgs,'Cgd'   : Cgd,'Cds'   : Cds}
+        return Equations.Equations.clip(Id)
 
 
-def plot_results(Vgs_values, Vds_values, T_values, params, show=True):
-    data = []
-    for T in T_values:
-        for Vgs in Vgs_values:
-            for Vds in Vds_values:
-                result = mosfet_model(Vgs, Vds, T, params)
-                data.append({
-                    'T': T,
-                    'Vgs': Vgs,
-                    'Vds': Vds,
-                    'Id': result['Id'],
-                    'Cgs': result['Cgs'],
-                    'Cgd': result['Cgd'],
-                    'Cds': result['Cds']
-                })
-
-    time_steps = int(1.0 / 1e-3)
-    time_array = np.linspace(0, 1.0, time_steps)
-    total_data_points = len(data)
-    time_column = np.resize(time_array, total_data_points)
-
-    df = pd.DataFrame(data)
-    df.insert(0, 'time', time_column)
-    os.makedirs("PyShorts/sicmos", exist_ok=True)
-    df.to_csv("PyShorts/sicmos/sicmos_BSIM3v3.csv", index=False)
-
-    data_np = df.to_numpy()
-    _, T_arr, Vgs_arr, Vds_arr, Id_arr, Cgs_arr, Cgd_arr, Cds_arr = data_np.T
-
-    fig, axs = plt.subplots(2, 2, figsize=(14, 10))
-    fig.suptitle('MOSFET Characteristics vs Vgs, Vds, T', fontsize=16)
-
-    for vds in np.unique(Vds_arr):
-        idx = (Vds_arr == vds) & (T_arr == 350)
-        axs[0, 0].plot(Vgs_arr[idx], Id_arr[idx], label=f'Vds={vds:.1f}V')
-    axs[0, 0].set_title('Id vs Vgs (T=350K)')
-    axs[0, 0].set_xlabel('Vgs [V]')
-    axs[0, 0].set_ylabel('Id [A]')
-    axs[0, 0].legend()
-    axs[0, 0].grid(True)
-
-    for vgs in np.unique(Vgs_arr):
-        idx = (Vgs_arr == vgs) & (T_arr == 350)
-        axs[0, 1].plot(Vds_arr[idx], Id_arr[idx], label=f'Vgs={vgs:.1f}V')
-    axs[0, 1].set_title('Id vs Vds (T=350K)')
-    axs[0, 1].set_xlabel('Vds [V]')
-    axs[0, 1].set_ylabel('Id [A]')
-    axs[0, 1].legend()
-    axs[0, 1].grid(True)
-
-    idx = (Vgs_arr == 2.5) & (T_arr == 350)
-    axs[1, 0].plot(Vds_arr[idx], Cgs_arr[idx], label='Cgs')
-    axs[1, 0].plot(Vds_arr[idx], Cgd_arr[idx], label='Cgd')
-    axs[1, 0].plot(Vds_arr[idx], Cds_arr[idx], label='Cds')
-    axs[1, 0].set_title('Capacitances vs Vds (Vgs=2.5V, T=350K)')
-    axs[1, 0].set_xlabel('Vds [V]')
-    axs[1, 0].set_ylabel('Capacitance [F]')
-    axs[1, 0].legend()
-    axs[1, 0].grid(True)
-
-    idx = (Vgs_arr == 15) & (Vds_arr == 600)
-    axs[1, 1].plot(T_arr[idx], Id_arr[idx])
-    axs[1, 1].set_title('Id vs Temperature (Vgs=15V, Vds=600V)')
-    axs[1, 1].set_xlabel('Temperature [K]')
-    axs[1, 1].set_ylabel('Id [A]')
-    axs[1, 1].grid(True)
-
-    plt.tight_layout()
-    if show:
-        plt.show()
-
+# Optional test/demo
 if __name__ == "__main__":
-    json_path = "PyShorts/sicmos/sicmos_BSIM3v3.json"
-    log_path  = "PyShorts/sicmos/sicmos_BSIM3v3.log"
-
-    params, param_meta = load_params_from_json(json_path)
-    print_header(params, param_meta, log_path)
-    Vgs_values = np.linspace(0.0, 20.0, 9)
-    Vds_values = np.linspace(0.0, 1200.0, 9)
-    T_values   = [300, 325, 350, 375, 400, 425, 450]
-
-    plot_results(Vgs_values, Vds_values, T_values, params, show=True)
+    model = BSIM3v3Model()
+    Vgs = 1.8
+    Vds = 1.2
+    Id = model.compute_Id(Vgs, Vds)
+    print(f"ID_BSIM3v3(Vgs={Vgs}, Vds={Vds}) = {Id:.6e} A")

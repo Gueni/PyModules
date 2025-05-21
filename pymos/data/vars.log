@@ -1,0 +1,5 @@
+# Log generated on 2025-05-21 17:25:25.128573
+Quantity                 Value          Equation                      Unit      Description                             Source         
+=======================================================================================================================================
+Vth0                     1              Vth0                          V         Threshold voltage at 300 K              BSIM3v3 model default or extracted from I_D-V_GS curve
+kT                       0.002          dVth/dT                       V/K       Vth temperature coefficient             Estimated or from temperature-dependent characterization
