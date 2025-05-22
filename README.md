@@ -1,4 +1,4 @@
-# 🐍 Python_code
+# 🐍 PyModules
 
 [![Python](https://img.shields.io/badge/code-Python-3776AB?style=flat&logo=python)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
