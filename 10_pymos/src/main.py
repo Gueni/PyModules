@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 import os
 import Id_BSIM3v3
-import Id_shichman_hodges
+import LV_1_Id_shichman_hodges
 import Caps_BSIM3v3
 import Caps_shichman_hodges
 from Plot import MOSFETPlotter
@@ -48,7 +48,7 @@ with open(json_path, 'r') as file:
 #? -------------------------------------------------------------------------------
 def main():
     # Instantiate models
-    sh_model = Id_shichman_hodges.ShichmanHodgesModel()
+    sh_model = LV_1_Id_shichman_hodges.ShichmanHodgesModel()
     bsim3_model = Id_BSIM3v3.BSIM3v3Model()
     sh_caps = Caps_shichman_hodges.ShichmanHodgesCapacitances()
     bsim3_caps = Caps_BSIM3v3.BSIM3v3Capacitances()

@@ -34,7 +34,7 @@ class BSIM3v3Model:
         self.L          = self.params["L"]["VALUE"]               # Channel length (m)
         self.theta      = self.params["theta"]["VALUE"]               # Channel length (m)
         self.lambda_    = self.params["lambda_"]["VALUE"]               # Channel length (m)
-        self.tox        = self.params["tox"]["VALUE"]               # Channel length (m)
+        self.tox        = self.params["TOX"]["VALUE"]               # Channel length (m)
         self.T          = 300                               # Temperature (K)
         
     def compute_Id(self, Vgs, Vds):

@@ -37,7 +37,7 @@ class Equations:
         self.mjsurf     = self.params["mjsurf"]["VALUE"]
         self.ni         = self.params["ni"]["VALUE"]
         self.PPW        = self.params["PPW"]["VALUE"]
-        self.tox        = self.params["tox"]["VALUE"]
+        self.tox        = self.params["TOX"]["VALUE"]
         self.mu         = self.params["mu"]["VALUE"]
         self.NJFET      = self.params["NJFET"]["VALUE"]
         self.H_by_eff   = self.params["H_by_eff"]["VALUE"]
@@ -115,6 +115,11 @@ class Equations:
         return self.eps_sic / (self.Wdep1_num(VDS_val, VGS_val) + self.Wdep2_num(VDS_val, VGS_val, T_val))
 
     def compute_Vth(self, Vsb):
-        return self.params["VTO"]["VALUE"] + self.params["GAMMA"]["VALUE"] * (
-            np.sqrt(abs(Vsb + self.params["PHI"]["VALUE"])) - np.sqrt(abs(self.params["PHI"]["VALUE"]))
-        )
+        vbi = self.params["VTO"]["VALUE"] - self.params["GAMMA"]["VALUE"] * np.sqrt(self.params["PHI"]["VALUE"]) 
+        # vbi =Vjto + self.params["PHI"]["VALUE"]
+        if Vsb < 0:
+            vth = vbi + self.params["GAMMA"]["VALUE"] * ( np.sqrt(self.params["PHI"]["VALUE"] ) +0.5*(Vsb/np.sqrt(self.params["PHI"]["VALUE"])))
+        elif Vsb >= 0:
+            vth = vbi + self.params["GAMMA"]["VALUE"] * np.sqrt( self.params["PHI"]["VALUE"] + Vsb)
+        return vth
+    
