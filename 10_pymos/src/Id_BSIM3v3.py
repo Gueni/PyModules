@@ -19,36 +19,36 @@
 #? -------------------------------------------------------------------------------
 
 import Log 
-import Equations
+from Equations  import Equations
 #? -------------------------------------------------------------------------------
 
 class BSIM3v3Model:
     def __init__(self, param_path=None):
         logger          = Log.Logger()
         self.params          = logger.load_parameters()
-
-        self.mu_0       = self.params["mu0"] * 1e-4  # Convert to m^2/Vs
-        self.C_ox       = self.params["C_ox"]                   # Oxide capacitance (F/m²)
-        self.alpha      = self.params["alpha"]                  # Charge partitioning factor
-        self.W          = self.params["W"]               # Channel width (m)
-        self.L          = self.params["L"]               # Channel length (m)
-        self.theta      = self.params["theta"]               # Channel length (m)
-        self.lambda_    = self.params["lambda_"]               # Channel length (m)
-        self.tox        = self.params["tox"]               # Channel length (m)
+        self.eq         = Equations()
+        self.mu_0       = self.params["mu0"]["VALUE"] # Convert to m^2/Vs
+        self.C_ox       = self.params["C_ox"]["VALUE"]                   # Oxide capacitance (F/m²)
+        self.alpha      = self.params["alpha"]["VALUE"]                  # Charge partitioning factor
+        self.W          = self.params["W"]["VALUE"]               # Channel width (m)
+        self.L          = self.params["L"]["VALUE"]               # Channel length (m)
+        self.theta      = self.params["theta"]["VALUE"]               # Channel length (m)
+        self.lambda_    = self.params["lambda_"]["VALUE"]               # Channel length (m)
+        self.tox        = self.params["tox"]["VALUE"]               # Channel length (m)
         self.T          = 300                               # Temperature (K)
         
     def compute_Id(self, Vgs, Vds):
 
-        Vt = Equations.Equations.thermal_voltage(self.T)
-        V_ov = Equations.Equations.surface_potential(Vt, Vgs)
-        V_ov_clipped = Equations.Equations.clip(V_ov)
+        Vt = self.eq.thermal_voltage(self.T)
+        V_ov = self.eq.surface_potential(Vt, Vgs)
+        V_ov_clipped = self.eq.clip(V_ov)
 
         # Effective mobility
         E_eff = V_ov_clipped / self.tox
-        mu_eff = Equations.Equations.effective_mobility(self.mu_0, E_eff, self.theta)
+        mu_eff = self.eq.effective_mobility(self.mu_0, E_eff, self.theta)
 
         # Saturation voltage
-        Vdsat = Equations.Equations.saturation_voltage(Vgs, Vt)
+        Vdsat = self.eq.saturation_voltage(Vgs, Vt)
 
         if Vds < Vdsat:
             # Linear region
@@ -56,9 +56,9 @@ class BSIM3v3Model:
         else:
             # Saturation region
             Id = 0.5 * mu_eff * self.C_ox * (self.W / self.L) * V_ov_clipped ** 2
-            Id *= Equations.Equations.channel_length_modulation(self.lambda_, Vds)
+            Id *= self.eq.channel_length_modulation(self.lambda_, Vds)
 
-        return Equations.Equations.clip(Id)
+        return self.eq.clip(Id)
 
 #? -------------------------------------------------------------------------------
 

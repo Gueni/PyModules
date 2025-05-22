@@ -83,7 +83,7 @@ class MOSFETPlotter:
 
 #? -------------------------------------------------------------------------------
 if __name__ == "__main__":
-    csv_path = r'D:\WORKSPACE\Python_code\pymos\data\shichman_hodges.csv'
+    csv_path = r'D:\WORKSPACE\PyModules\10_pymos\data\shichman_hodges.csv'
     plotter = MOSFETPlotter(csv_path)
     plotter.plot()
 #? -------------------------------------------------------------------------------

@@ -42,7 +42,7 @@ DATA_DIR = "data"
 os.makedirs(DATA_DIR, exist_ok=True)
 SH_PATH = os.path.join(DATA_DIR, "shichman_hodges.csv")
 BSIM3_PATH = os.path.join(DATA_DIR, "BSIM3v3.csv")
-json_path = r'D:\WORKSPACE\Python_code\pymos\vars.json'
+json_path = r'D:\WORKSPACE\PyModules\10_pymos\src\vars.json'
 with open(json_path, 'r') as file:
     data_dict = json.load(file)
 #? -------------------------------------------------------------------------------

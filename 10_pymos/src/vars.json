@@ -19,10 +19,10 @@
     "UNIT": "1",
     "DESCRIPTION": "Mobility temperature exponent"
   },
-  "Cox": {
-    "VALUE": 0.01,
+  "COX": {
+    "VALUE": 3.453e-4,
     "UNIT": "F/m^2",
-    "DESCRIPTION": "Gate oxide capacitance per UNIT area"
+    "DESCRIPTION": "Oxide capacitance per unit gate area. If COX is not specified, it is calculatedfrom TOX."
   },
   "W": {
     "VALUE": 1e-4,
@@ -67,7 +67,7 @@
   "eps_ox": {
     "VALUE": 3.45e-11,
     "UNIT": "F/m",
-    "DESCRIPTION": "Permittivity of SiO₂"
+    "DESCRIPTION": "Permittivity of SiO2"
   },
   "tox": {
     "VALUE": 5e-9,
@@ -210,9 +210,9 @@
     "DESCRIPTION": "Oxide capacitance per UNIT area"
   },
   "lambda_": {
-    "VALUE": 0.02,
-    "UNIT": "1/V",
-    "DESCRIPTION": "Channel-length modulation parameter"
+    "VALUE": 0.0,
+    "UNIT": "V-1",
+    "DESCRIPTION": "Channel-length modulation"
   },
   "theta": {
     "VALUE": 0.7,
@@ -228,5 +228,100 @@
     "VALUE": 5e-9,
     "UNIT": "m",
     "DESCRIPTION": "Oxide thickness"
+  },
+  "KP_N": {
+    "VALUE": 2.0718e-5,
+    "UNIT": "A/V2",
+    "DESCRIPTION": "Intrinsic transconductance parameter.\n If KP is not specified and UO and TOX\n are entered, the parameter is computed\n from:KP = UO · COX"
+  },
+  "KP_P": {
+    "VALUE": 8.632e-6,
+    "UNIT": "A/V2",
+    "DESCRIPTION": "Intrinsic transconductance parameter.\n If KP is not specified and UO and TOX\n are entered, the parameter is computed\n from:KP = UO · COX"
+  },
+  "TOX": {
+    "VALUE": 1e-7 ,
+    "UNIT": "m",
+    "DESCRIPTION": "Gate oxide thickness"
+  },
+  "UO": {
+    "VALUE": 1e-4 ,
+    "UNIT": "cm2/(V·s)",
+    "DESCRIPTION": "Carrier mobility"
+  },
+  "DEL": {
+    "VALUE": 0.0 ,
+    "UNIT": "m",
+    "DESCRIPTION": "Channel length reduction on each side.\n DELscaled = DEL · SCALM"
+  },
+  "LD": {
+    "VALUE": 1 ,
+    "UNIT": "m",
+    "DESCRIPTION": "Lateral diffusion into channel from source\n and drain diffusion.If LD and XJ are unspecified,\n LD Default=0.0.When LD is unspecified\n but XJ is specified, LD is calculated \nas: LD Default=0.75 · XJLD scaled = LD · SCALM"
+  },
+  "LDAC": {
+    "VALUE": 1 ,
+    "UNIT": "m",
+    "DESCRIPTION": "This parameter is the same as LD, but if LDAC\n is in the .MODEL statement, it replaces LD\n in the Leff calculation for AC gate capacitance."
+  },
+  "LMLT": {
+    "VALUE": 1.0,
+    "UNIT": "N/A",
+    "DESCRIPTION": "Length shrink factor."
+  },
+  "WD": {
+    "VALUE": 0.0,
+    "UNIT": "m",
+    "DESCRIPTION": "Lateral diffusion into channel from bulk along width."
+  },
+  "WDAC": {
+    "VALUE": 0.0,
+    "UNIT": "m",
+    "DESCRIPTION": "Same as WD but used for AC gate capacitance."
+  },
+  "WMLT": {
+    "VALUE": 1.0,
+    "UNIT": "N/A",
+    "DESCRIPTION": "Diffusion layer and width shrink factor."
+  },
+  "XJ": {
+    "VALUE": 0.0,
+    "UNIT": "m",
+    "DESCRIPTION": "Metallurgical junction depth."
+  },
+  "XL": {
+    "VALUE": 0.0,
+    "UNIT": "m",
+    "DESCRIPTION": "Masking and etching length correction."
+  },
+  "XW": {
+    "VALUE": 0.0,
+    "UNIT": "m",
+    "DESCRIPTION": "Masking and etching width correction."
+  },
+  "GAMMA": {
+    "VALUE": 0.5276,
+    "UNIT": "V^0.5",
+    "DESCRIPTION": "Body effect coefficient."
+  },
+  "NFS": {
+    "VALUE": 0.0,
+    "UNIT": "cm-2·V-1",
+    "DESCRIPTION": "Fast surface state density."
+  },
+  "NSUB": {
+    "VALUE": 1e15,
+    "UNIT": "cm-3",
+    "DESCRIPTION": "Substrate doping concentration."
+  },
+  "PHI": {
+    "VALUE": 0.576,
+    "UNIT": "V",
+    "DESCRIPTION": "Surface inversion potential."
+  },
+  "VTO": {
+    "VALUE": 0.0,
+    "UNIT": "V",
+    "DESCRIPTION": "Zero-bias threshold voltage."
   }
 }
