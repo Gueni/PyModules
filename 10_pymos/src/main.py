@@ -18,42 +18,33 @@
 #? Licence:     Refer to the LICENSE file
 #? -------------------------------------------------------------------------------
 
-
 import numpy as np
 import pandas as pd
 import os
-import Id_BSIM3v3
+import LV_49_Id_BSIM3v3
 import LV_1_Id_shichman_hodges
-import Caps_BSIM3v3
-import Caps_shichman_hodges
+import LV_49_Caps_BSIM3v3
+import LV_1_Caps_shichman_hodges
 from Plot import MOSFETPlotter
 from plot_compare import MOSFETModelComparer
 import Log
 import json
 #? -------------------------------------------------------------------------------
-# Simulation sweep settings
-Vgs_values = np.linspace(0.0, 20.0, 9)           # 0V to 20V
-Vds_values = np.linspace(0.0, 800.0, 9)          # 0V to 800V
-T_values   = [300, 325, 350, 375, 400, 425, 450] # Kelvin
-
-Plot = True
-# Paths for data output
-DATA_DIR = "data"
-os.makedirs(DATA_DIR, exist_ok=True)
-SH_PATH = os.path.join(DATA_DIR, "shichman_hodges.csv")
-BSIM3_PATH = os.path.join(DATA_DIR, "BSIM3v3.csv")
-json_path = r'D:\WORKSPACE\PyModules\10_pymos\src\vars.json'
-with open(json_path, 'r') as file:
-    data_dict = json.load(file)
+Vgs_values      = np.linspace(0.0, 20.0, 9)           # 0V to 20V
+Vds_values      = np.linspace(0.0, 800.0, 9)          # 0V to 800V
+T_values        = [300, 325, 350, 375, 400, 425, 450] # Kelvin
+Plot            = True
+SH_PATH         = r"D:\WORKSPACE\PyModules\10_pymos\data\shichman_hodges.csv"
+BSIM3_PATH      = r"D:\WORKSPACE\PyModules\10_pymos\data\BSIM3v3.csv"
+json_path       = r'D:\WORKSPACE\PyModules\10_pymos\src\vars.json'
+data_dict       = Log.Logger().load_parameters()    
 #? -------------------------------------------------------------------------------
 def main():
-    # Instantiate models
-    sh_model = LV_1_Id_shichman_hodges.ShichmanHodgesModel()
-    bsim3_model = Id_BSIM3v3.BSIM3v3Model()
-    sh_caps = Caps_shichman_hodges.ShichmanHodgesCapacitances()
-    bsim3_caps = Caps_BSIM3v3.BSIM3v3Capacitances()
-
-    logger = Log.Logger()
+    sh_model    = LV_1_Id_shichman_hodges.ShichmanHodgesModel()
+    bsim3_model = LV_49_Id_BSIM3v3.BSIM3v3Model()
+    sh_caps     = LV_1_Caps_shichman_hodges.ShichmanHodgesCapacitances()
+    bsim3_caps  = LV_49_Caps_BSIM3v3.BSIM3v3Capacitances()
+    logger      = Log.Logger()
     logger.log(data_dict)
 
     # --- Simulate Shichman-Hodges ---
@@ -75,8 +66,8 @@ def main():
                     'CDS': Cds
                 })
 
-    sh_df = pd.DataFrame(sh_records)
-    sh_df['time'] = np.linspace(0, 1.0, len(sh_df))
+    sh_df           = pd.DataFrame(sh_records)
+    sh_df['time']   = np.linspace(0, 1.0, len(sh_df))
     sh_df.to_csv(SH_PATH, index=False)
     print(f"Saved Shichman-Hodges simulation to {SH_PATH}")
 
@@ -99,19 +90,17 @@ def main():
                     'CDS': Cds
                 })
 
-    bsim3_df = pd.DataFrame(bsim3_records)
+    bsim3_df         = pd.DataFrame(bsim3_records)
     bsim3_df['time'] = np.linspace(0, 1.0, len(bsim3_df))
     bsim3_df.to_csv(BSIM3_PATH, index=False)
     print(f"Saved BSIM3v3 simulation to {BSIM3_PATH}")
 
     # --- Compare the two models ---
     if Plot:
-        print("Plotting comparison of Shichman-Hodges and BSIM3v3...")
-        sh_plotter = MOSFETPlotter(SH_PATH)
-        bsim3_plotter = MOSFETPlotter(BSIM3_PATH)
+        sh_plotter      = MOSFETPlotter(SH_PATH, model="LV 1 Shichman-Hodges")
+        bsim3_plotter   = MOSFETPlotter(BSIM3_PATH, model="LV 49 BSIM3v3")
         sh_plotter.plot()
         bsim3_plotter.plot()
-        print("Comparing Shichman-Hodges and BSIM3v3...")
         compare_plotter = MOSFETModelComparer(SH_PATH, BSIM3_PATH)
         compare_plotter.plot()
 #? -------------------------------------------------------------------------------

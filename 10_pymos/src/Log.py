@@ -46,7 +46,6 @@ class Logger:
             data = json.load(f)
         return data  # Return full structure
 
-
     def _write_txt_log(self, quantities):
         console = Console(record=True, width=130) 
         table = Table(title="Parameter Log", show_lines=True, expand=True)

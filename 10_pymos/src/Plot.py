@@ -24,11 +24,12 @@ import matplotlib.pyplot as plt
 import os
 #? -------------------------------------------------------------------------------
 class MOSFETPlotter:
-    def __init__(self, csv_path):
+    def __init__(self, csv_path,model='Shichman-Hodges'):
         if not os.path.exists(csv_path):
             raise FileNotFoundError(f"Data file not found at {csv_path}")
         self.df = pd.read_csv(csv_path)
         self._validate_columns()
+        self.model = model
 
     def _validate_columns(self):
         required_cols = {"time", "VGS", "VDS", "ID", "CGS", "CGD", "CDS", "T"}
@@ -37,7 +38,7 @@ class MOSFETPlotter:
 
     def plot(self, show=True):
         fig, axs = plt.subplots(2, 2, figsize=(14, 10))
-        fig.suptitle("MOSFET Simulation Results", fontsize=16)
+        fig.suptitle(f"MOSFET Simulation Results for {self.model}", fontsize=16)
 
         self._plot_id_vs_vgs(axs[0, 0])
         self._plot_id_vs_vds(axs[0, 1])
