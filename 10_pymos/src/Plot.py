@@ -67,8 +67,8 @@ class MOSFETModelComparer:
 
         # --- Id vs Temperature ---
         fig_id_temp = go.Figure()
-        idx1 = (self.Vgs1 == 15) & (self.Vds1 == 600)
-        idx2 = (self.Vgs2 == 15) & (self.Vds2 == 600)
+        idx1 = (self.Vgs1 == 20) & (self.Vds1 == 800)
+        idx2 = (self.Vgs2 == 20) & (self.Vds2 == 800)
         fig_id_temp.add_trace(go.Scatter(x=self.T1[idx1], y=self.Id1[idx1], name="BSIM Id", line=dict(dash='solid')))
         fig_id_temp.add_trace(go.Scatter(x=self.T2[idx2], y=self.Id2[idx2], name="SH Id", line=dict(dash='dot')))
         fig_id_temp.update_layout(title="Id vs Temperature (Vgs=15V, Vds=600V)", xaxis_title="Temperature [K]", yaxis_title="Id [A]", legend=dict(x=1, y=1))
@@ -77,25 +77,25 @@ class MOSFETModelComparer:
         # --- Id vs Vgs ---
         fig_id_vgs = go.Figure()
         for vds in np.unique(self.Vds1):
-            i1 = (self.Vds1 == vds) & (self.T1 == 300)
-            i2 = (self.Vds2 == vds) & (self.T2 == 300)
+            i1 = (self.Vds1 == vds) & (self.T1 == 350)
+            i2 = (self.Vds2 == vds) & (self.T2 == 350)
             if np.any(i1):
                 fig_id_vgs.add_trace(go.Scatter(x=self.Vgs1[i1], y=self.Id1[i1], name=f"BSIM Vds={vds:.1f}", line=dict(dash='solid')))
             if np.any(i2):
                 fig_id_vgs.add_trace(go.Scatter(x=self.Vgs2[i2], y=self.Id2[i2], name=f"SH Vds={vds:.1f}", line=dict(dash='dot')))
-        fig_id_vgs.update_layout(title="Id vs Vgs (T=300K)", xaxis_title="Vgs [V]", yaxis_title="Id [A]", legend=dict(x=1, y=1))
+        fig_id_vgs.update_layout(title="Id vs Vgs (T=350K)", xaxis_title="Vgs [V]", yaxis_title="Id [A]", legend=dict(x=1, y=1))
         figures.append(fig_id_vgs)
 
         # --- Id vs Vds ---
         fig_id_vds = go.Figure()
         for vgs in np.unique(self.Vgs1):
-            i1 = (self.Vgs1 == vgs) & (self.T1 == 300)
-            i2 = (self.Vgs2 == vgs) & (self.T2 == 300)
+            i1 = (self.Vgs1 == vgs) & (self.T1 == 350)
+            i2 = (self.Vgs2 == vgs) & (self.T2 == 350)
             if np.any(i1):
                 fig_id_vds.add_trace(go.Scatter(x=self.Vds1[i1], y=self.Id1[i1], name=f"BSIM Vgs={vgs:.1f}", line=dict(dash='solid')))
             if np.any(i2):
                 fig_id_vds.add_trace(go.Scatter(x=self.Vds2[i2], y=self.Id2[i2], name=f"SH Vgs={vgs:.1f}", line=dict(dash='dot')))
-        fig_id_vds.update_layout(title="Id vs Vds (T=300K)", xaxis_title="Vds [V]", yaxis_title="Id [A]", legend=dict(x=1, y=1))
+        fig_id_vds.update_layout(title="Id vs Vds (T=350K)", xaxis_title="Vds [V]", yaxis_title="Id [A]", legend=dict(x=1, y=1))
         figures.append(fig_id_vds)
 
         # --- Export all figures to one HTML ---

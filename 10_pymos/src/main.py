@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # coding=utf-8
 #? -------------------------------------------------------------------------------
@@ -22,9 +23,9 @@ import LV_1_Shichman_Hodges
 from Plot import MOSFETModelComparer
 import Log
 #? -------------------------------------------------------------------------------
-Vgs_values  = np.linspace(0.0, 20.0, 9)
-Vds_values  = np.linspace(0.0, 800.0, 9)
-T_values    = [300, 325, 350, 375, 400, 425, 450]
+Vgs_values  = np.linspace(0.0, 20.0, 19)
+Vds_values  = np.linspace(0.0, 800.0, 19)
+T_values    = [350, 375, 400, 425, 450]
 SH_PATH     = r"D:\WORKSPACE\PyModules\10_pymos\data\shichman_hodges.csv"
 BSIM3_PATH  = r"D:\WORKSPACE\PyModules\10_pymos\data\BSIM3v3.csv"
 PLOT        = True
@@ -39,10 +40,9 @@ def simulate_model(model, T_values, Vgs_values, Vds_values, path):
     total_points    = len(combinations)
 
     for i, (T, Vgs, Vds) in enumerate(combinations):
-        Id              = model._ID_(Vgs, Vds, T=T)
-        Cgs, Cgd, Cds   = model._Caps_(Vgs, Vds)
+        Id,Cgs, Cgd, Cds    = model.compute(Vgs=Vgs, Vds=Vds,Vsb=0.0,T=T)
         records.append({
-            'time'  : i // total_points  ,
+            'time'  : i // total_points ,
             'T'     : T                 ,
             'VGS'   : Vgs               ,
             'VDS'   : Vds               ,
@@ -61,7 +61,7 @@ def main():
     simulate_model(bsim3_model  , T_values, Vgs_values, Vds_values, BSIM3_PATH  )
 
     if PLOT:
-        plotter = MOSFETModelComparer(SH_PATH, BSIM3_PATH)
+        plotter = MOSFETModelComparer(BSIM3_PATH,SH_PATH)
         plotter.plot()
 
 #? -------------------------------------------------------------------------------

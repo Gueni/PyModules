@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # coding=utf-8
 #? -------------------------------------------------------------------------------
@@ -30,13 +31,12 @@ class ShichmanHodgesModel:
         self.mu         = self.params["mu"]["VALUE"]               
         self.C_ox       = self.params["C_ox"]["VALUE"]              
         self.lambda_    = self.params["lambda_"]["VALUE"]           
-        self.KP         = self.mu * self.C_ox
-        self.L_eff      = 1 
-        self.W_eff      = 1
-        self.alpha      = self.params["alpha"]["VALUE"]
+        self.KP         = 2.0718e-5 #self.mu * self.C_ox
+        self.L_eff      = 1 # L_scaled * LMLT + XL_scaled - 2*(LD_scaled + DEL_scaled) 
+        self.W_eff      = 1 # 1 * ( W_scaled * WMLT + XW_scaled - 2 * WD_scaled) 
         self.C_g_total  = self.C_ox 
 
-    def _ID_(self, Vgs, Vds, Vsb=0.0, T=300):
+    def compute(self, Vgs, Vds, Vsb=0.0, T=350):
         Vth             = self.eq.compute_Vth(Vsb,T)
         Vsat            = Vgs - Vth
         W_over_L        = self.W_eff / self.L_eff
@@ -46,35 +46,30 @@ class ShichmanHodgesModel:
         elif Vsat      <  Vds   :   region = "saturation"   #! Vds >= Vgs - Vth
 
         match region:
-            case "cutoff"       :   Id = 0.0
-            case "linear"       :   Id = self.KP * W_over_L * (1 + self.lambda_ * Vds) * (Vsat - (Vds/2)) * Vds
-            case "saturation"   :   Id = 1/2 * self.KP * W_over_L * (1 + self.lambda_ * Vds) * np.square(Vsat)
-        return np.float64(Id)
-
-    def _Caps_(self, Vgs, Vds, Vsb=0.0):
-        Vth     = self.eq.compute_Vth(Vsb)
-        Vsat    = Vgs - Vth
-
-        if      Vsat    <= 0    : # region = "cutoff"       #! Vgs <= Vth
-                Cgs = 0.0
-                Cgd = 0.0
-                Cds = 0.0
-        elif    Vsat    >= Vds  : # region = "linear"       #! vds <= vgs-Vth
-                Cgs = 0.0
-                Cgd = 0.0
-                Cds = 0.0
-        elif    Vsat    <  Vds  : # region = "saturation"   #! Vds >= Vgs - Vth
-                Cgs = 0.0
-                Cgd = 0.0
-                Cds = 0.0
-
-        return Cgs, Cgd, Cds
+            case "cutoff"       :   
+                        Id  = 0.0
+                        Cgs = 0.0
+                        Cgd = 0.0
+                        Cds = 0.0
+            case "linear"       :   
+                        Id  = self.KP * W_over_L * (1 + self.lambda_ * Vds) * (Vsat - (Vds/2)) * Vds
+                        Cgs = 0.0
+                        Cgd = 0.0
+                        Cds = 0.0
+            case "saturation"   :   
+                        Id  = 1/2 * self.KP * W_over_L * (1 + self.lambda_ * Vds) * np.square(Vsat)
+                        Cgs = 0.0
+                        Cgd = 0.0
+                        Cds = 0.0
+        return Id,Cgs, Cgd, Cds
 #? -------------------------------------------------------------------------------
-# if __name__ == "__main__":
-#     model               = ShichmanHodgesModel()
-#     Vgs , Vds , Vsb ,T  = 15 , 600 , 0.0 , 300
-#     Id                  = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
-#     Cgs, Cgd, Cds       = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
-#     print(f"ID_ShichmanHodges(Vgs={Vgs}, Vds={Vds}, Vsb={Vsb}) = {Id:.6e} A")
-#     print(f"Caps (Shichman-Hodges) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
+if __name__ == "__main__":
+    model               = ShichmanHodgesModel()
+    Vgs , Vds , Vsb ,T  = 15 , 600 , 0.0 , 300
+    Id,Cgs, Cgd, Cds    = model.compute(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
+    print("-------------------------------------------------------")
+    print(f"\n(Vgs={Vgs}, Vds={Vds}, Vsb={Vsb})")
+    print(f"\nID  = {Id:.6e} A")
+    print(f"Cgs = {Cgs:.3e} F\nCgd = {Cgd:.3e} F\nCds = {Cds:.3e} F")
+    print("-------------------------------------------------------")
 #? -------------------------------------------------------------------------------

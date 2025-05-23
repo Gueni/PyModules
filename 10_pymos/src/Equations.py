@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # coding=utf-8
 #? -------------------------------------------------------------------------------
@@ -43,24 +44,20 @@ class Equations:
         self.XJPW       = self.params["XJPW"]["VALUE"]
         self.dpw        = self.params["dpw"]["VALUE"]
         self.mj         = self.params["mj"]["VALUE"]
-        self.T_default  = 300
-
-    def thermal_voltage(self, T=None):
-        if T is None:
-            T = self.T_default
-        return self.k * T / self.q
+        self.Gamma      = self.params["GAMMA"]["VALUE"]
+#? -------------------------------------------------------------------------------
 
     def phi_t(self, T):
         return (self.k * T) / self.q
 
     def phi(self, T):
-        return self.phi_t(T) * np.log(self.NJFET * self.PPW / (self.ni ** 2))
+        return self.phi_t(T) * np.log(self.NJFET * self.PPW / (np.square(self.ni)))
 
     def alpha(self):
         return np.sqrt((2 * self.eps_sic * self.PPW) / (self.q * self.NJFET * (self.NJFET + self.PPW)))
 
     def VTO_func(self, T):
-        return float(self.phi(T) - (self.dpw / (2 * self.alpha()))**2)
+        return float(self.phi(T) - np.square(self.dpw / (2 * self.alpha())))
 
     def rho(self):
         return 1 / (self.q * self.NJFET * self.mu)
@@ -82,13 +79,16 @@ class Equations:
 
     def Cdep_num(self, VDS_val, VGS_val, T_val):
         return self.eps_sic / (self.Wdep1_num(VDS_val, VGS_val) + self.Wdep2_num(VDS_val, VGS_val, T_val))
+#? -------------------------------------------------------------------------------
 
-    def compute_Vth(self, Vsb,T=300):
-        vbi             = self.VTO_func(T) - self.params["GAMMA"]["VALUE"] *   np.sqrt(self.phi(T)) 
+    def compute_Vth(self, Vsb,T):
+        # vbi             = self.VTO_func(T) - self.Gamma *   np.sqrt(self.phi(T)) 
+        vbi             = self.VFB + self.phi(T)
+        print(self.phi(T), vbi)
         if      Vsb < 0 :
-                vth     = vbi + self.params["GAMMA"]["VALUE"] * ( np.sqrt(self.phi(T)) + 1/2 * (Vsb/np.sqrt(self.phi(T))))
+                vth     = vbi + self.Gamma * ( np.sqrt(self.phi(T)) + 1/2 * (Vsb/np.sqrt(self.phi(T))))
         elif    Vsb >= 0:
-                vth     = vbi + self.params["GAMMA"]["VALUE"] *   np.sqrt( self.phi(T)+ Vsb)
+                vth     = vbi + self.Gamma *   np.sqrt( self.phi(T)+ Vsb)
         return  vth
     
 #? -------------------------------------------------------------------------------

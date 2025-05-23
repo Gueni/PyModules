@@ -35,12 +35,10 @@ class BSIM3v3Model:
         self.lambda_    = self.params["lambda_"]["VALUE"]
         self.tox        = self.params["TOX"]["VALUE"]
         self.T          = 300
-        self.C_ox       = self.params["C_ox"]["VALUE"]
-        self.alpha      = self.params["alpha"]["VALUE"]
         
         self.C_g_total  = self.C_ox 
         
-    def _ID_(self, Vgs, Vds,Vsb=0.0,T=300):
+    def compute(self, Vgs, Vds,Vsb=0.0,T=300):
         Vth             = self.eq.compute_Vth(Vsb,T)
         Vsat            = Vgs - Vth
         mu_eff          = self.mu_0 / (1 + self.theta * ( Vsat / self.tox))
@@ -50,37 +48,32 @@ class BSIM3v3Model:
         elif Vsat      <  Vds   :   region = "saturation"   #! Vds >= Vgs - Vth
 
         match region:
-            case "cutoff"       :   Id = 0.0
-            case "linear"       :   Id = mu_eff * self.C_ox * (1 /1) * ((Vsat * Vds) - 0.5 * Vds ** 2)
-            case "saturation"   :   Id = (0.5 * mu_eff * self.C_ox * (1 / 1) * Vsat ** 2 *(1 + self.lambda_ * Vds))
+            case "cutoff"       :   
+                    Id  = 0.0
+                    Cgs = 0.0
+                    Cgd = 0.0
+                    Cds = 0.0
+            case "linear"       :   
+                    Id  = mu_eff * self.C_ox * (1 /1) * ((Vsat * Vds) - 0.5 * Vds ** 2)
+                    Cgs = 0.0
+                    Cgd = 0.0
+                    Cds = 0.0
+            case "saturation"   :   
+                    Id  = (0.5 * mu_eff * self.C_ox * (1 / 1) * Vsat ** 2 *(1 + self.lambda_ * Vds))
+                    Cgs = 0.0
+                    Cgd = 0.0
+                    Cds = 0.0
 
-        return np.float64(Id)
-
-    def _Caps_(self, Vgs, Vds,Vsb=0.0):
-        Vth             = self.eq.compute_Vth(Vsb)
-        Vsat    = Vgs - Vth
-
-        if      Vsat    <= 0    : # region = "cutoff"       #! Vgs <= Vth
-                Cgs = 0.0
-                Cgd = 0.0
-                Cds = 0.0
-        elif    Vsat    >= Vds  : # region = "linear"       #! vds <= vgs-Vth
-                Cgs = 0.0
-                Cgd = 0.0
-                Cds = 0.0
-        elif    Vsat    <  Vds  : # region = "saturation"   #! Vds >= Vgs - Vth
-                Cgs = 0.0
-                Cgd = 0.0
-                Cds = 0.0
-
-        return Cgs, Cgd, Cds
+        return Id ,Cgs, Cgd, Cds
 
 #? -------------------------------------------------------------------------------
-# if __name__ == "__main__":
-#     model           = BSIM3v3Model()
-#     Vgs , Vds , Vsb ,T  = 15 , 600 , 1.0 , 300
-#     Id                  = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
-#     Cgs, Cgd, Cds       = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
-#     print(f"ID_BSIM3v3(Vgs={Vgs}, Vds={Vds}) = {Id:.6e} A")
-#     print(f"Caps (BSIM3v3-like) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
+if __name__ == "__main__":
+    model               = BSIM3v3Model()
+    Vgs , Vds , Vsb ,T  = 15 , 600 , 0.0 , 300
+    Id,Cgs, Cgd, Cds    = model.compute(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
+    print("-------------------------------------------------------")
+    print(f"\n(Vgs={Vgs}, Vds={Vds}, Vsb={Vsb})")
+    print(f"\nID  = {Id:.6e} A")
+    print(f"Cgs = {Cgs:.3e} F\nCgd = {Cgd:.3e} F\nCds = {Cds:.3e} F")
+    print("-------------------------------------------------------")
 #? -------------------------------------------------------------------------------
