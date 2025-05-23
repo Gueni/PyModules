@@ -40,9 +40,8 @@ class BSIM3v3Model:
         
         self.C_g_total  = self.C_ox 
         
-    def _ID_(self, Vgs, Vds,Vsb=0.0):
-        Vt              = self.eq.thermal_voltage(self.T)
-        Vth             = self.eq.compute_Vth(Vsb)
+    def _ID_(self, Vgs, Vds,Vsb=0.0,T=300):
+        Vth             = self.eq.compute_Vth(Vsb,T)
         Vsat            = Vgs - Vth
         mu_eff          = self.mu_0 / (1 + self.theta * ( Vsat / self.tox))
 
@@ -79,9 +78,9 @@ class BSIM3v3Model:
 #? -------------------------------------------------------------------------------
 if __name__ == "__main__":
     model           = BSIM3v3Model()
-    Vgs , Vds , Vsb = 15 , 600 , 1.0
-    Id              = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
-    Cgs, Cgd, Cds   = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
+    Vgs , Vds , Vsb ,T  = 15 , 600 , 1.0 , 300
+    Id                  = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
+    Cgs, Cgd, Cds       = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
     print(f"ID_BSIM3v3(Vgs={Vgs}, Vds={Vds}) = {Id:.6e} A")
     print(f"Caps (BSIM3v3-like) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
 #? -------------------------------------------------------------------------------

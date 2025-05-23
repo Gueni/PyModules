@@ -36,8 +36,8 @@ class ShichmanHodgesModel:
         self.alpha      = self.params["alpha"]["VALUE"]
         self.C_g_total  = self.C_ox 
 
-    def _ID_(self, Vgs, Vds, Vsb=0.0):
-        Vth             = self.eq.compute_Vth(Vsb)
+    def _ID_(self, Vgs, Vds, Vsb=0.0, T=300):
+        Vth             = self.eq.compute_Vth(Vsb,T)
         Vsat            = Vgs - Vth
         W_over_L        = self.W_eff / self.L_eff
 
@@ -72,9 +72,9 @@ class ShichmanHodgesModel:
 #? -------------------------------------------------------------------------------
 if __name__ == "__main__":
     model           = ShichmanHodgesModel()
-    Vgs , Vds , Vsb = 20 , 10 , 1.0
-    Id              = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
-    Cgs, Cgd, Cds   = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
+    Vgs , Vds , Vsb ,T  = 15 , 600 , 0.0 , 300
+    Id                  = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
+    Cgs, Cgd, Cds       = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
     print(f"ID_ShichmanHodges(Vgs={Vgs}, Vds={Vds}, Vsb={Vsb}) = {Id:.6e} A")
     print(f"Caps (Shichman-Hodges) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
 #? -------------------------------------------------------------------------------
