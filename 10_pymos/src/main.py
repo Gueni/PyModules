@@ -41,7 +41,6 @@ def main():
     logger.log(data_dict)
 
     # --- Simulate Shichman-Hodges ---
-    print("Simulating Shichman-Hodges model...")
     sh_records = []
     for T in T_values:
         for Vgs in Vgs_values:
@@ -62,10 +61,8 @@ def main():
     sh_df           = pd.DataFrame(sh_records)
     sh_df['time']   = np.linspace(0, 1.0, len(sh_df))
     sh_df.to_csv(SH_PATH, index=False)
-    print(f"Saved Shichman-Hodges simulation to {SH_PATH}")
 
     # --- Simulate BSIM3v3 ---
-    print("Simulating BSIM3v3 model...")
     bsim3_records = []
     for T in T_values:
         for Vgs in Vgs_values:
@@ -86,7 +83,6 @@ def main():
     bsim3_df         = pd.DataFrame(bsim3_records)
     bsim3_df['time'] = np.linspace(0, 1.0, len(bsim3_df))
     bsim3_df.to_csv(BSIM3_PATH, index=False)
-    print(f"Saved BSIM3v3 simulation to {BSIM3_PATH}")
 
     # --- Compare the two models ---
     if Plot:

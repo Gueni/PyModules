@@ -17,6 +17,7 @@
 #? Created:     21/05/2025
 #? Licence:     Refer to the LICENSE file
 #? -------------------------------------------------------------------------------
+import io
 import os
 import json
 import textwrap
@@ -41,10 +42,10 @@ class Logger:
         return data
 
     def _write_txt_log(self, quantities):
-        i = 0
-        fake_output = io.StringIO()
-        console = Console(file=fake_output, width=130, record=True)
-        table = Table(title="PARAMETERS LOG", show_lines=True, expand=True)
+        i                   = 0
+        fake_output         = io.StringIO()
+        console             = Console(file=fake_output, width=130, record=True)
+        table               = Table(title="PARAMETERS LOG", show_lines=True, expand=True)
         table.add_column("Num", style="cyan", no_wrap=True)
         table.add_column("Quantity", style="cyan", no_wrap=True)
         table.add_column("VALUE", style="green", justify="right")
@@ -52,10 +53,10 @@ class Logger:
         table.add_column("DESCRIPTION", style="white")
 
         for key, entry in quantities.items():
-            value = entry.get("VALUE", "")
-            unit = entry.get("UNIT", "")
-            description = entry.get("DESCRIPTION", "")
-            wrapped_desc = "\n".join(textwrap.wrap(description, width=60))
+            value           = entry.get("VALUE", "")
+            unit            = entry.get("UNIT", "")
+            description     = entry.get("DESCRIPTION", "")
+            wrapped_desc    = "\n".join(textwrap.wrap(description, width=60))
             table.add_row(str(i), str(key), str(value), str(unit), wrapped_desc)
             i += 1
         console.print(table)
