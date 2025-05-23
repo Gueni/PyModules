@@ -84,11 +84,11 @@ class Equations:
         return self.eps_sic / (self.Wdep1_num(VDS_val, VGS_val) + self.Wdep2_num(VDS_val, VGS_val, T_val))
 
     def compute_Vth(self, Vsb,T=300):
-        vbi = 2.5 - self.params["GAMMA"]["VALUE"] * np.sqrt(self.phi(T)) 
-        if Vsb < 0:
-            vth = vbi + self.params["GAMMA"]["VALUE"] * ( np.sqrt(self.phi(T) ) +0.5*(Vsb/np.sqrt(self.phi(T))))
-        elif Vsb >= 0:
-            vth = vbi + self.params["GAMMA"]["VALUE"] * np.sqrt( self.phi(T)+ Vsb)
-        return vth
+        vbi             = self.params["VTo"]["VALUE"] - self.params["GAMMA"]["VALUE"] *   np.sqrt(self.phi(T)) 
+        if      Vsb < 0 :
+                vth     = vbi + self.params["GAMMA"]["VALUE"] * ( np.sqrt(self.phi(T)) + 1/2 * (Vsb/np.sqrt(self.phi(T))))
+        elif    Vsb >= 0:
+                vth     = vbi + self.params["GAMMA"]["VALUE"] *   np.sqrt( self.phi(T)+ Vsb)
+        return  vth
     
 #? -------------------------------------------------------------------------------

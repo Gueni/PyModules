@@ -14,6 +14,11 @@
     "UNIT"         : "m",
     "DESCRIPTION"  : "Gate oxide thickness"
         },
+  "VTo": {
+    "VALUE"        : 0.7,
+    "UNIT"         : "V",
+    "DESCRIPTION"  : "zero-bias threshold voltage."
+        },
   "GAMMA": {
     "VALUE"        : 0.5276,
     "UNIT"         : "V^0.5",
