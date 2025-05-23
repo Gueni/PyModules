@@ -60,21 +60,21 @@ class ShichmanHodgesModel:
                 Cgd = 0.0
                 Cds = 0.0
         elif    Vsat    >= Vds  : # region = "linear"       #! vds <= vgs-Vth
-                Cgs = 2 / 3 * self.C_g_total
-                Cgd = 1 / 3 * self.C_g_total
+                Cgs = 0.0
+                Cgd = 0.0
                 Cds = 0.0
         elif    Vsat    <  Vds  : # region = "saturation"   #! Vds >= Vgs - Vth
-                Cgs = 2 / 3 * self.C_g_total
+                Cgs = 0.0
                 Cgd = 0.0
                 Cds = 0.0
 
         return Cgs, Cgd, Cds
 #? -------------------------------------------------------------------------------
-if __name__ == "__main__":
-    model           = ShichmanHodgesModel()
-    Vgs , Vds , Vsb ,T  = 15 , 600 , 0.0 , 300
-    Id                  = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
-    Cgs, Cgd, Cds       = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
-    print(f"ID_ShichmanHodges(Vgs={Vgs}, Vds={Vds}, Vsb={Vsb}) = {Id:.6e} A")
-    print(f"Caps (Shichman-Hodges) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
+# if __name__ == "__main__":
+#     model               = ShichmanHodgesModel()
+#     Vgs , Vds , Vsb ,T  = 15 , 600 , 0.0 , 300
+#     Id                  = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
+#     Cgs, Cgd, Cds       = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
+#     print(f"ID_ShichmanHodges(Vgs={Vgs}, Vds={Vds}, Vsb={Vsb}) = {Id:.6e} A")
+#     print(f"Caps (Shichman-Hodges) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
 #? -------------------------------------------------------------------------------

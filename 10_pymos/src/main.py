@@ -20,13 +20,10 @@
 
 import numpy as np
 import pandas as pd
-import os
 import LV_13_BSIM3v3
 import LV_1_Shichman_Hodges
-from Plot import MOSFETPlotter
-from plot_compare import MOSFETModelComparer
+from Plot import MOSFETModelComparer
 import Log
-import json
 #? -------------------------------------------------------------------------------
 Vgs_values      = np.linspace(0.0, 20.0, 9)           # 0V to 20V
 Vds_values      = np.linspace(0.0, 800.0, 9)          # 0V to 800V
@@ -93,10 +90,6 @@ def main():
 
     # --- Compare the two models ---
     if Plot:
-        sh_plotter      = MOSFETPlotter(SH_PATH, model="LV 1 Shichman-Hodges")
-        bsim3_plotter   = MOSFETPlotter(BSIM3_PATH, model="LV 49 BSIM3v3")
-        sh_plotter.plot()
-        bsim3_plotter.plot()
         compare_plotter = MOSFETModelComparer(SH_PATH, BSIM3_PATH)
         compare_plotter.plot()
 #? -------------------------------------------------------------------------------

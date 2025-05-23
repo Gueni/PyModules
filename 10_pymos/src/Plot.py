@@ -124,10 +124,9 @@ class MOSFETModelComparer:
 
         print(f"HTML with all plots saved to: {self.output_html}")
 #? -------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    csv1 = r'D:\WORKSPACE\PyModules\10_pymos\data\shichman_hodges.csv'
-    csv2 = r'D:\WORKSPACE\PyModules\10_pymos\data\BSIM3v3.csv'
-    comparer = MOSFETModelComparer(csv1, csv2)
-    comparer.plot()
+# if __name__ == "__main__":
+#     csv1 = r'D:\WORKSPACE\PyModules\10_pymos\data\shichman_hodges.csv'
+#     csv2 = r'D:\WORKSPACE\PyModules\10_pymos\data\BSIM3v3.csv'
+#     comparer = MOSFETModelComparer(csv1, csv2)
+#     comparer.plot()
 #? -------------------------------------------------------------------------------

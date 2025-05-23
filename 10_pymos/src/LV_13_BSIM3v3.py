@@ -65,22 +65,22 @@ class BSIM3v3Model:
                 Cgd = 0.0
                 Cds = 0.0
         elif    Vsat    >= Vds  : # region = "linear"       #! vds <= vgs-Vth
-                Cgs = self.alpha * self.C_g_total
-                Cgd = (1 - self.alpha) * self.C_g_total
+                Cgs = 0.0
+                Cgd = 0.0
                 Cds = 0.0
         elif    Vsat    <  Vds  : # region = "saturation"   #! Vds >= Vgs - Vth
-                Cgs = self.alpha * self.C_g_total
+                Cgs = 0.0
                 Cgd = 0.0
                 Cds = 0.0
 
         return Cgs, Cgd, Cds
 
 #? -------------------------------------------------------------------------------
-if __name__ == "__main__":
-    model           = BSIM3v3Model()
-    Vgs , Vds , Vsb ,T  = 15 , 600 , 1.0 , 300
-    Id                  = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
-    Cgs, Cgd, Cds       = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
-    print(f"ID_BSIM3v3(Vgs={Vgs}, Vds={Vds}) = {Id:.6e} A")
-    print(f"Caps (BSIM3v3-like) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
+# if __name__ == "__main__":
+#     model           = BSIM3v3Model()
+#     Vgs , Vds , Vsb ,T  = 15 , 600 , 1.0 , 300
+#     Id                  = model._ID_(Vgs=Vgs, Vds=Vds,Vsb=Vsb,T=T)
+#     Cgs, Cgd, Cds       = model._Caps_(Vgs=Vgs, Vds=Vds,Vsb=Vsb)
+#     print(f"ID_BSIM3v3(Vgs={Vgs}, Vds={Vds}) = {Id:.6e} A")
+#     print(f"Caps (BSIM3v3-like) at Vgs={Vgs}, Vds={Vds}:\n  Cgs = {Cgs:.3e} F\n  Cgd = {Cgd:.3e} F\n  Cds = {Cds:.3e} F")
 #? -------------------------------------------------------------------------------

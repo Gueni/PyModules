@@ -17,7 +17,6 @@
 #? Created:     21/05/2025
 #? Licence:     Refer to the LICENSE file
 #? -------------------------------------------------------------------------------
-
 import os
 import json
 import textwrap
@@ -35,33 +34,34 @@ class Logger:
 
     def log(self, quantities):
         self._write_txt_log(quantities)
-        print(f"Logged to:\n- {self.log_path_txt}\n- {self.log_path_json}")
 
     def load_parameters(self):
         with open(self.log_path_json, "r") as f:
             data = json.load(f)
-        return data  # Return full structure
+        return data
 
     def _write_txt_log(self, quantities):
-        i=0
-        console = Console(record=True, width=130) 
+        i = 0
+        fake_output = io.StringIO()
+        console = Console(file=fake_output, width=130, record=True)
         table = Table(title="PARAMETERS LOG", show_lines=True, expand=True)
         table.add_column("Num", style="cyan", no_wrap=True)
         table.add_column("Quantity", style="cyan", no_wrap=True)
         table.add_column("VALUE", style="green", justify="right")
         table.add_column("UNIT", style="magenta")
         table.add_column("DESCRIPTION", style="white")
+
         for key, entry in quantities.items():
             value = entry.get("VALUE", "")
             unit = entry.get("UNIT", "")
             description = entry.get("DESCRIPTION", "")
             wrapped_desc = "\n".join(textwrap.wrap(description, width=60))
-            table.add_row(str(i),str(key), str(value), str(unit), wrapped_desc)
-            i+=1
+            table.add_row(str(i), str(key), str(value), str(unit), wrapped_desc)
+            i += 1
         console.print(table)
         with open(self.log_path_txt, "w", encoding="utf-8") as f:
             f.write("=" * 130 + "\n")
-            f.write(console.export_text())
+            f.write(fake_output.getvalue())
             f.write("=" * 130 + "\n")
 
 #? -------------------------------------------------------------------------------
