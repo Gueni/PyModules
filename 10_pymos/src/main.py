@@ -27,7 +27,7 @@ Vds_values  = np.linspace(0.0, 800.0, 9)
 T_values    = [300, 325, 350, 375, 400, 425, 450]
 SH_PATH     = r"D:\WORKSPACE\PyModules\10_pymos\data\shichman_hodges.csv"
 BSIM3_PATH  = r"D:\WORKSPACE\PyModules\10_pymos\data\BSIM3v3.csv"
-PLOT        = False
+PLOT        = True
 logger      = Log.Logger()
 data_dict   = logger.load_parameters()
 sh_model    = LV_1_Shichman_Hodges.ShichmanHodgesModel()
@@ -42,13 +42,13 @@ def simulate_model(model, T_values, Vgs_values, Vds_values, path):
         Id              = model._ID_(Vgs, Vds, T=T)
         Cgs, Cgd, Cds   = model._Caps_(Vgs, Vds)
         records.append({
-            'time'  : i / total_points,
-            'T'     : T,
-            'VGS'   : Vgs,
-            'VDS'   : Vds,
-            'ID'    : Id,
-            'CGS'   : Cgs,
-            'CGD'   : Cgd,
+            'time'  : i // total_points  ,
+            'T'     : T                 ,
+            'VGS'   : Vgs               ,
+            'VDS'   : Vds               ,
+            'ID'    : Id                ,
+            'CGS'   : Cgs               ,  
+            'CGD'   : Cgd               ,
             'CDS'   : Cds
         })
 

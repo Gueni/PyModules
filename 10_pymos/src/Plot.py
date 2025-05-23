@@ -38,7 +38,6 @@ class MOSFETModelComparer:
             raise ValueError(f"Both CSVs must contain the following columns: {required_cols}")
 
     def _unpack_data(self):
-        self.time1, self.time2 = self.df1["time"], self.df2["time"]
         self.T1, self.T2 = self.df1["T"], self.df2["T"]
         self.Vgs1, self.Vgs2 = self.df1["VGS"], self.df2["VGS"]
         self.Vds1, self.Vds2 = self.df1["VDS"], self.df2["VDS"]
@@ -49,21 +48,6 @@ class MOSFETModelComparer:
 
     def plot(self):
         figures = []
-
-        # --- Id vs Time ---
-        fig_id_time = go.Figure()
-        fig_id_time.add_trace(go.Scatter(x=self.time1, y=self.Id1, name="BSIM Id", line=dict(dash='solid')))
-        fig_id_time.add_trace(go.Scatter(x=self.time2, y=self.Id2, name="SH Id", line=dict(dash='dot')))
-        fig_id_time.update_layout(title="Id vs Time", xaxis_title="Time", yaxis_title="Id [A]", legend=dict(x=1, y=1))
-        figures.append(fig_id_time)
-
-        # --- Capacitances vs Time ---
-        fig_caps_time = go.Figure()
-        for name, c1, c2 in [("Cgs", self.Cgs1, self.Cgs2), ("Cgd", self.Cgd1, self.Cgd2), ("Cds", self.Cds1, self.Cds2)]:
-            fig_caps_time.add_trace(go.Scatter(x=self.time1, y=c1, name=f"BSIM {name}", line=dict(dash='solid')))
-            fig_caps_time.add_trace(go.Scatter(x=self.time2, y=c2, name=f"SH {name}", line=dict(dash='dot')))
-        fig_caps_time.update_layout(title="Capacitances vs Time", xaxis_title="Time", yaxis_title="Capacitance [F]", legend=dict(x=1, y=1))
-        figures.append(fig_caps_time)
 
         # --- Capacitances vs Vds ---
         fig_caps_vds = go.Figure()
