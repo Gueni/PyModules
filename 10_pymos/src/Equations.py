@@ -26,7 +26,6 @@ class Equations:
     def __init__(self):
         self.logger     = Log.Logger()
         self.params     = self.logger.load_parameters()
-
         self.q          = self.params["q"]["VALUE"]
         self.k          = self.params["k"]["VALUE"]
         self.eps_ox     = self.params["eps_ox"]["VALUE"]
@@ -50,36 +49,6 @@ class Equations:
         if T is None:
             T = self.T_default
         return self.k * T / self.q
-
-    def effective_mobility(self, mu_0, E_eff, theta):
-        return mu_0 / (1 + theta * E_eff)
-
-    def surface_potential(self, Vth, Vgs):
-        return Vgs - Vth
-
-    def saturation_voltage(self, Vgs, Vth):
-        return Vgs - Vth
-
-    def channel_length_modulation(self, lambda_, Vds):
-        return 1 + lambda_ * Vds
-
-    def compute_capacitance(self, C_ox, W, L, factor=1.0):
-        return factor * C_ox * W * L
-
-    def compute_e_eff(self, Vgs, Vth):
-        return (Vgs - Vth) / self.tox  # Simplified
-
-    def compute_C_ox(self):
-        return self.eps_ox / self.tox
-
-    def diode_eq(self, V, Is, n=1, T=None):
-        if T is None:
-            T = self.T_default
-        Vt = self.thermal_voltage(T)
-        return Is * (np.exp(V / (n * Vt)) - 1)
-
-    def clip(self, value, min_val=0):
-        return np.maximum(value, min_val)
 
     def phi_t(self, T):
         return (self.k * T) / self.q
@@ -115,7 +84,7 @@ class Equations:
         return self.eps_sic / (self.Wdep1_num(VDS_val, VGS_val) + self.Wdep2_num(VDS_val, VGS_val, T_val))
 
     def compute_Vth(self, Vsb):
-        vbi = self.params["VTO"]["VALUE"] - self.params["GAMMA"]["VALUE"] * np.sqrt(self.params["PHI"]["VALUE"]) 
+        vbi = 2.5 - self.params["GAMMA"]["VALUE"] * np.sqrt(self.params["PHI"]["VALUE"]) 
         # vbi =Vjto + self.params["PHI"]["VALUE"]
         if Vsb < 0:
             vth = vbi + self.params["GAMMA"]["VALUE"] * ( np.sqrt(self.params["PHI"]["VALUE"] ) +0.5*(Vsb/np.sqrt(self.params["PHI"]["VALUE"])))
@@ -123,3 +92,4 @@ class Equations:
             vth = vbi + self.params["GAMMA"]["VALUE"] * np.sqrt( self.params["PHI"]["VALUE"] + Vsb)
         return vth
     
+#? -------------------------------------------------------------------------------

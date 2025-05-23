@@ -18,12 +18,8 @@
 #? Licence:     Refer to the LICENSE file
 #? -------------------------------------------------------------------------------
 
-import json
-import os
-from datetime import datetime
 import os
 import json
-from datetime import datetime
 import textwrap
 from rich.console import Console
 from rich.table import Table
@@ -47,8 +43,10 @@ class Logger:
         return data  # Return full structure
 
     def _write_txt_log(self, quantities):
+        i=0
         console = Console(record=True, width=130) 
-        table = Table(title="Parameter Log", show_lines=True, expand=True)
+        table = Table(title="PARAMETERS LOG", show_lines=True, expand=True)
+        table.add_column("Num", style="cyan", no_wrap=True)
         table.add_column("Quantity", style="cyan", no_wrap=True)
         table.add_column("VALUE", style="green", justify="right")
         table.add_column("UNIT", style="magenta")
@@ -58,11 +56,10 @@ class Logger:
             unit = entry.get("UNIT", "")
             description = entry.get("DESCRIPTION", "")
             wrapped_desc = "\n".join(textwrap.wrap(description, width=60))
-            table.add_row(str(key), str(value), str(unit), wrapped_desc)
+            table.add_row(str(i),str(key), str(value), str(unit), wrapped_desc)
+            i+=1
         console.print(table)
         with open(self.log_path_txt, "w", encoding="utf-8") as f:
-            f.write("=" * 130 + "\n")
-            f.write(f"# Log generated on {datetime.now()}\n")
             f.write("=" * 130 + "\n")
             f.write(console.export_text())
             f.write("=" * 130 + "\n")

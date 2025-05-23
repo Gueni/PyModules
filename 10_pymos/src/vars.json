@@ -1,18 +1,8 @@
 {
-  "COX": {
+  "C_ox": {
     "VALUE"        : 3.453e-4,
     "UNIT"         : "F/m^2",
     "DESCRIPTION"  : "Oxide capacitance per unit gate area. If COX is not specified, it is calculatedfrom TOX."
-        },
-  "KP_N": {
-    "VALUE"        : 2.0718e-5,
-    "UNIT"         : "A/V2",
-    "DESCRIPTION"  : "Intrinsic transconductance parameter.\n If KP is not specified and UO and TOX\n are entered, the parameter is computed\n from:KP = UO · COX"
-        },
-  "KP_P": {
-    "VALUE"        : 8.632e-6,
-    "UNIT"         : "A/V2",
-    "DESCRIPTION"  : "Intrinsic transconductance parameter.\n If KP is not specified and UO and TOX\n are entered, the parameter is computed\n from:KP = UO · COX"
         },
   "lambda_": {
     "VALUE"        : 0.02,
@@ -23,62 +13,6 @@
     "VALUE"        : 1e-7 ,
     "UNIT"         : "m",
     "DESCRIPTION"  : "Gate oxide thickness"
-        },
-  "UO": {
-    "VALUE"        : 1e-4 ,
-    "UNIT"         : "cm2/(V·s)",
-    "DESCRIPTION"  : "Carrier mobility"
-        },
-  "DEL": {
-    "VALUE"        : 0.0 ,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "Channel length reduction on each side.\n DELscaled = DEL · SCALM"
-        },
-
-  "LD": {
-    "VALUE"        : 1 ,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "Lateral diffusion into channel from source\n and drain diffusion.If LD and XJ are unspecified,\n LD Default=0.0.When LD is unspecified\n but XJ is specified, LD is calculated \nas: LD Default=0.75 · XJLD scaled = LD · SCALM"
-        },
-  "LDAC": {
-    "VALUE"        : 1 ,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "This parameter is the same as LD, but if LDAC\n is in the .MODEL statement, it replaces LD\n in the Leff calculation for AC gate capacitance."
-        },
-  "LMLT": {
-    "VALUE"        : 1.0,
-    "UNIT"         : "N/A",
-    "DESCRIPTION"  : "Length shrink factor."
-        },
-  "WD": {
-    "VALUE"        : 0.1e-6,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "Lateral diffusion into channel from bulk along width."
-        },
-  "WDAC": {
-    "VALUE"        : 0.1e-6,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "Same as WD but used for AC gate capacitance."
-        },
-  "WMLT": {
-    "VALUE"        : 1.0,
-    "UNIT"         : "N/A",
-    "DESCRIPTION"  : "Diffusion layer and width shrink factor."
-        },
-  "XJ": {
-    "VALUE"        : 0.1e-6,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "Metallurgical junction depth."
-        },
-  "XL": {
-    "VALUE"        : 0.1e-6,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "Masking and etching length correction."
-        },
-  "XW": {
-    "VALUE"        : 0.1e-6,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "Masking and etching width correction."
         },
   "GAMMA": {
     "VALUE"        : 0.5276,
@@ -100,20 +34,10 @@
     "UNIT"         : "V",
     "DESCRIPTION"  : "Surface inversion potential."
         },
-  "VTO": {
-    "VALUE"        : 0.1e-6,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Zero-bias threshold voltage."
-        },
-  "Vth0": {
-    "VALUE"        : 2.5,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Typical threshold voltage at 25°C"
-        },
-  "kT": {
-    "VALUE"        : -0.005,
-    "UNIT"         : "V/K",
-    "DESCRIPTION"  : "Threshold voltage temperature coefficient"
+  "mu": {
+    "VALUE"        : 0.01,
+    "UNIT"         : "m^2/Vs",
+    "DESCRIPTION"  : "Carrier mobility"
         },
   "mu0": {
     "VALUE"        : 0.02,
@@ -124,27 +48,6 @@
     "VALUE"        : 1.5,
     "UNIT"         : "1",
     "DESCRIPTION"  : "Mobility temperature exponent"
-        },
-  "W": {
-    "VALUE"        : 1e-4,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "MOSFET channel width"
-        },
-  "L": {
-    "VALUE"        : 1e-6,
-    "UNIT"         : "m",
-    "DESCRIPTION"  : "MOSFET channel length"
-        },
-
-  "Cj0": {
-    "VALUE"        : 1e-12,
-    "UNIT"         : "F",
-    "DESCRIPTION"  : "Zero-bias junction capacitance"
-        },
-  "Vbi": {
-    "VALUE"        : 0.7,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Built-in junction potential"
         },
   "q": {
     "VALUE"        : 1.6e-19,
@@ -166,7 +69,6 @@
     "UNIT"         : "F/m",
     "DESCRIPTION"  : "Permittivity of SiO2"
         },
-
   "ni": {
     "VALUE"        : 1.5e8,
     "UNIT"         : "1/cm^3",
@@ -197,11 +99,6 @@
     "UNIT"         : "m",
     "DESCRIPTION"  : "P-well separation"
         },
-  "mu": {
-    "VALUE"        : 0.01,
-    "UNIT"         : "m^2/Vs",
-    "DESCRIPTION"  : "Carrier mobility"
-        },
   "H_by_eff": {
     "VALUE"        : 1e-7,
     "UNIT"         : "m",
@@ -227,11 +124,6 @@
     "UNIT"         : "1",
     "DESCRIPTION"  : "Bulk junction grading coefficient"
         },
-  "Vj": {
-    "VALUE"        : 0.7,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Junction built-in potential"
-        },
   "m": {
     "VALUE"        : 0.5,
     "UNIT"         : "1",
@@ -242,74 +134,8 @@
     "UNIT"         : "F",
     "DESCRIPTION"  : "Overlap capacitance"
         },
-  "Cj": {
-    "VALUE"        : 1e-12,
-    "UNIT"         : "F",
-    "DESCRIPTION"  : "Junction capacitance"
-        },
-  "Vj0": {
-    "VALUE"        : 0.7,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Zero-bias junction potential"
-        },
-  "Vjsw": {
-    "VALUE"        : 0.7,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Sidewall junction potential"
-        },
-  "Cjsw": {
-    "VALUE"        : 1e-12,
-    "UNIT"         : "F",
-    "DESCRIPTION"  : "Sidewall junction capacitance"
-        },
-  "Cjswg": {
-    "VALUE"        : 1e-12,
-    "UNIT"         : "F",
-    "DESCRIPTION"  : "Gate-sidewall junction capacitance"
-        },
-  "Cjsw0": {
-    "VALUE"        : 1e-12,
-    "UNIT"         : "F",
-    "DESCRIPTION"  : "Zero-bias sidewall junction capacitance"
-        },
-  "Vjsw0": {
-    "VALUE"        : 0.7,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Zero-bias sidewall junction potential"
-        },
-  "Vjsw1": {
-    "VALUE"        : 0.7,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Sidewall junction potential"
-        },
-  "Cjsw1": {
-    "VALUE"        : 1e-12,
-    "UNIT"         : "F",
-    "DESCRIPTION"  : "Sidewall junction capacitance"
-        },
-  "Cjswg1": {
-    "VALUE"        : 1e-12,
-    "UNIT"         : "F",
-    "DESCRIPTION"  : "Gate-sidewall junction capacitance"
-        },
-  "Cjsw01": {
-    "VALUE"        : 1e-12,
-    "UNIT"         : "F",
-    "DESCRIPTION"  : "Zero-bias sidewall junction capacitance"
-        },
-  "C_ox": {
-    "VALUE"        : 0.01,
-    "UNIT"         : "F/m²",
-    "DESCRIPTION"  : "Oxide capacitance per UNIT area"
-        },
-
   "theta": {
     "VALUE"        : 0.7,
-    "UNIT"         : "V",
-    "DESCRIPTION"  : "Threshold voltage"
-        },
-  "Vth": {
-    "VALUE"        : 2.5,
     "UNIT"         : "V",
     "DESCRIPTION"  : "Threshold voltage"
         },
@@ -318,5 +144,4 @@
     "UNIT"         : "m",
     "DESCRIPTION"  : "Oxide thickness"
         }
-
 }

@@ -21,10 +21,8 @@
 import numpy as np
 import pandas as pd
 import os
-import LV_49_Id_BSIM3v3
-import LV_1_Id_shichman_hodges
-import LV_49_Caps_BSIM3v3
-import LV_1_Caps_shichman_hodges
+import LV_13_BSIM3v3
+import LV_1_Shichman_Hodges
 from Plot import MOSFETPlotter
 from plot_compare import MOSFETModelComparer
 import Log
@@ -33,17 +31,15 @@ import json
 Vgs_values      = np.linspace(0.0, 20.0, 9)           # 0V to 20V
 Vds_values      = np.linspace(0.0, 800.0, 9)          # 0V to 800V
 T_values        = [300, 325, 350, 375, 400, 425, 450] # Kelvin
-Plot            = True
+Plot            = False
 SH_PATH         = r"D:\WORKSPACE\PyModules\10_pymos\data\shichman_hodges.csv"
 BSIM3_PATH      = r"D:\WORKSPACE\PyModules\10_pymos\data\BSIM3v3.csv"
 json_path       = r'D:\WORKSPACE\PyModules\10_pymos\src\vars.json'
 data_dict       = Log.Logger().load_parameters()    
 #? -------------------------------------------------------------------------------
 def main():
-    sh_model    = LV_1_Id_shichman_hodges.ShichmanHodgesModel()
-    bsim3_model = LV_49_Id_BSIM3v3.BSIM3v3Model()
-    sh_caps     = LV_1_Caps_shichman_hodges.ShichmanHodgesCapacitances()
-    bsim3_caps  = LV_49_Caps_BSIM3v3.BSIM3v3Capacitances()
+    sh_model    = LV_1_Shichman_Hodges.ShichmanHodgesModel()
+    bsim3_model = LV_13_BSIM3v3.BSIM3v3Model()
     logger      = Log.Logger()
     logger.log(data_dict)
 
@@ -53,8 +49,8 @@ def main():
     for T in T_values:
         for Vgs in Vgs_values:
             for Vds in Vds_values:
-                Id = sh_model.compute_Id(Vgs, Vds)
-                Cgs, Cgd, Cds = sh_caps.compute(Vgs, Vds)
+                Id              = sh_model._ID_(Vgs, Vds)
+                Cgs, Cgd, Cds   = sh_model._Caps_(Vgs, Vds)
                 sh_records.append({
                     'time': 0,
                     'T': T,
@@ -77,8 +73,8 @@ def main():
     for T in T_values:
         for Vgs in Vgs_values:
             for Vds in Vds_values:
-                Id = bsim3_model.compute_Id(Vgs, Vds)
-                Cgs, Cgd, Cds = bsim3_caps.compute(Vgs, Vds)
+                Id              = bsim3_model._ID_(Vgs, Vds)
+                Cgs, Cgd, Cds   = bsim3_model._Caps_(Vgs, Vds)
                 bsim3_records.append({
                     'time': 0,
                     'T': T,
